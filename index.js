@@ -23,3 +23,16 @@ module.exports.sum = function sum (a, b) {
 module.exports.calculDistance = function calculDistance (coordA, coordB) {
     return 0;
 };
+
+/**
+ * The grid need to be store in order to restart from where it was the last time.
+ * What structure do I need ?
+ * [
+ *     {
+ *         coord: {...}, // Position of the top left, the middle coord need to be
+ *         // calculed...
+ *         step: 80, // Distance in meter. Or side of the square
+ *         //...
+ *     }
+ * ]
+ */
