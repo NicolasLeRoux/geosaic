@@ -1,0 +1,19 @@
+{
+  "name": "geosaic",
+  "version": "0.1.0",
+  "description": "TODO",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NicolasLeRoux/geosaic.git"
+  },
+  "author": "Nicolas Le Roux",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NicolasLeRoux/geosaic/issues"
+  },
+  "homepage": "https://github.com/NicolasLeRoux/geosaic#readme"
+}
