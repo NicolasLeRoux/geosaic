@@ -1,10 +1,23 @@
 const expect = require('expect.js');
 const {
-    sum
+	buildGrid
 } = require('./index.js');
 
-describe(`The method 'sum',`, () => {
-    it(`Should return 3 given 1 and 2 as inputs.`, () => {
-        expect(sum(1, 2)).to.equal(3);
-    });
+describe(`The method 'buildGrid',`, () => {
+	it(`Should have the first grid `, () => {
+		const coordStart = {
+			lat: 50.000000,
+			lon: 2.000000
+		};
+		const coordEnd = {
+			lat: 48.853489,
+			lon: 2.349937
+		};
+		const grid = buildGrid(coordStart, coordEnd);
+
+		expect(grid[0].coord).to.equal({
+			lat: 48.853489,
+			lon: 2.349937
+		});
+	});
 });
