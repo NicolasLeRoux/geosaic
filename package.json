@@ -4,7 +4,7 @@
   "description": "TODO",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./**/*.spec.js"
+    "test": "mocha ./**/*.spec.js index.spec.js"
   },
   "repository": {
     "type": "git",
