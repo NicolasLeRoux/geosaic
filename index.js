@@ -32,3 +32,33 @@ module.exports.buildGrid = function buildGrid (coordStart, coordEnd, step) {
 
 	return result;
 }
+
+/**
+ * TODO...
+ */
+module.exports.getRootNeighbors = function getRootNeighbors (node, index, array, nbRow) {
+    const response = [];
+
+    // Top neighbor
+    if (!!array[index - 1] && index % nbRow !== 0) {
+        response.push(array[index - 1]);
+    }
+
+    // Right neighbor
+    if (!!array[index + nbRow]) {
+        response.push(array[index + nbRow]);
+    }
+
+
+    // Bottom neighbor
+    if (!!array[index + 1] && (index + 1) % nbRow !== 0) {
+        response.push(array[index + 1]);
+    }
+
+    // Left neighbor
+    if (!!array[index - nbRow]) {
+        response.push(array[index - nbRow]);
+    }
+
+    return response;
+}

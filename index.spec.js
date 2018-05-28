@@ -1,6 +1,7 @@
 const expect = require('expect.js');
 const {
-	buildGrid
+	buildGrid,
+    getRootNeighbors,
 } = require('./index.js');
 const {
 	calculEarthGeodesic
@@ -53,6 +54,88 @@ describe(`In the index module,`, () => {
 			const grid = buildGrid(coordEnd01, coordStart01, 50);
 
 			expect(grid.length).to.equal(0);
+		});
+	});
+
+	describe(`The method 'getRootNeighbors',`, () => {
+        const PARENT_NODE_01 = {
+            id: 1,
+            coord: {
+                lat: 0,
+                lon: 0
+            },
+            step: 100,
+            parent: null,
+            childs: [
+            ]
+        };
+
+        const PARENT_NODE_02 = {
+            id: 2,
+            coord: {
+                lat: 0,
+                lon: 0
+            },
+            step: 100,
+            parent: null,
+            childs: [
+            ]
+        };
+
+        const PARENT_NODE_03 = {
+            id: 3,
+            coord: {
+                lat: 0,
+                lon: 0
+            },
+            step: 100,
+            parent: null,
+            childs: [
+            ]
+        };
+
+        const PARENT_NODE_04 = {
+            id: 4,
+            coord: {
+                lat: 0,
+                lon: 0
+            },
+            step: 100,
+            parent: null,
+            childs: [
+            ]
+        };
+
+		it(`Should return 0 if the node doesn't have any root neighbors.`, () => {
+            const neighbors = getRootNeighbors(PARENT_NODE_01, 0, [], 1);
+
+			expect(neighbors.length).to.equal(0);
+		});
+
+		it(`Should return 2 root neighbors for the given node.`, () => {
+            const neighbors = getRootNeighbors(PARENT_NODE_01, 0, [
+                PARENT_NODE_01,
+                PARENT_NODE_02,
+                PARENT_NODE_03,
+                PARENT_NODE_04
+            ], 2);
+
+			expect(neighbors.length).to.equal(2);
+			expect(neighbors[0].id).to.equal(3);
+			expect(neighbors[1].id).to.equal(2);
+		});
+
+		it(`Should return 2 root neighbors for the given node (bis).`, () => {
+            const neighbors = getRootNeighbors(PARENT_NODE_03, 2, [
+                PARENT_NODE_01,
+                PARENT_NODE_02,
+                PARENT_NODE_03,
+                PARENT_NODE_04
+            ], 2);
+
+			expect(neighbors.length).to.equal(2);
+			expect(neighbors[0].id).to.equal(4);
+			expect(neighbors[1].id).to.equal(1);
 		});
 	});
 });
