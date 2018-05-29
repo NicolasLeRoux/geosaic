@@ -2,7 +2,8 @@ const expect = require('expect.js');
 const {
 	buildGrid,
 	getRootNeighbors,
-	buildGeoTile
+	buildGeoTile,
+	getNeighbors
 } = require('./index.js');
 const {
 	calculEarthGeodesic
@@ -205,6 +206,15 @@ describe(`In the index module,`, () => {
 				expect(tile.coords[test.idx].lat).to.equal(test.expectedLat);
 				expect(tile.coords[test.idx].lon).to.equal(test.expectedLon);
 			});
+		});
+
+		it(`Should have the given ID in params.`, () => {
+			const tile = buildGeoTile({
+				lat: 40,
+				lon: 2
+			}, 100, 33);
+
+			expect(tile.id).to.equal(33);
 		});
 	});
 });

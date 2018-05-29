@@ -82,7 +82,7 @@ module.exports.getRootNeighbors = function getRootNeighbors (node, index, array,
  * @param step The size of the side of the geographic square
  * @return A GeoTile for the given inputs
  */
-module.exports.buildGeoTile = function buildGeoTile (coord, step) {
+module.exports.buildGeoTile = function buildGeoTile (coord, step, id) {
 	const coords = [coord];
 	const nextLat = calculNextLatitude(coord, step)
 	const nextLon = calculNextLongitude(coord, step);
@@ -104,6 +104,7 @@ module.exports.buildGeoTile = function buildGeoTile (coord, step) {
 	});
 
 	return {
+		id,
 		coords,
 		step
 	};
