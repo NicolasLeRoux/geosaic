@@ -4,6 +4,7 @@
   "description": "TODO",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "test": "mocha ./**/*.spec.js index.spec.js"
   },
   "repository": {
@@ -19,5 +20,8 @@
   "devDependencies": {
     "expect.js": "^0.3.1",
     "mocha": "^5.2.0"
+  },
+  "dependencies": {
+    "express": "^4.16.3"
   }
 }
