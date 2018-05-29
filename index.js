@@ -62,3 +62,49 @@ module.exports.getRootNeighbors = function getRootNeighbors (node, index, array,
 
     return response;
 }
+
+/**
+ * Util to build a GeoTile from a coordinate and a step.
+ *
+ * Example of GeoTile:
+ * {
+ *     coords: [
+ *         {}, // Top Left
+ *         {}, // Top Right
+ *         {}, // Bottom Right
+ *         {}  // Bottom Left
+ *     ],
+ *     step: 100,
+ *     parent: '',
+ *     childs: []
+ * }
+ * @param coord The coordinate of the top left corne.
+ * @param step The size of the side of the geographic square
+ * @return A GeoTile for the given inputs
+ */
+module.exports.buildGeoTile = function buildGeoTile (coord, step) {
+    const coords = [coord];
+    const nextLat = +calculNextLatitude(coord, step).toFixed(6);
+    const nextLon = +calculNextLongitude(coord, step).toFixed(6);
+
+    // Top Right
+    coords.push({
+        lat: coord.lat,
+        lon: nextLon
+    });
+    // Bottom Right
+    coords.push({
+        lat: nextLat,
+        lon: nextLon
+    });
+    // Bottom Left
+    coords.push({
+        lat: nextLat,
+        lon: coord.lon
+    });
+
+    return {
+        coords,
+        step
+    };
+}
