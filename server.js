@@ -1,6 +1,10 @@
 const path = require('path');
 const express = require('express');
 const http = require('http');
+const {
+	buildGrid,
+	buildGeoTile
+} = require('./index.js');
 
 let app = express(),
 	server = http.createServer(app);
@@ -17,9 +21,23 @@ app.get('/node_modules/**/*', (req, res) => {
 	res.sendFile(path.join(__dirname, req.url));
 });
 
-app.get('/api/test', (req, res) => {
+app.get('/api/grid/:latA/:lonA/:latB/:lonB/:step', (req, res) => {
+	const coordA = {
+		lat: +req.params.latA,
+		lon: +req.params.lonA
+	};
+	const coordB = {
+		lat: +req.params.latB,
+		lon: +req.params.lonB
+	};
+	const step = +req.params.step;
+	const grid = buildGrid(coordA, coordB, step)
+		.map((coord, idx) => {
+			return buildGeoTile(coord, step, idx);
+		});
+
 	res.setHeader('Content-Type', 'application/json');
-	res.send(JSON.stringify({a: 1}));
+	res.send(JSON.stringify(grid));
 });
 
 /**

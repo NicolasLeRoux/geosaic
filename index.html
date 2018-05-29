@@ -26,7 +26,22 @@
 				[51.509, -0.06],
 				[51.503, -0.06],
 				[51.503, -0.08]
-			]).addTo(geoMap);
+			], {
+				color: 'red',
+				fillColor: '#f03',
+				fillOpacity: 0.1,
+			}).addTo(geoMap);
+
+			fetch('/api/grid/51.51/-0.08/51.503/-0.06/200').then(resp => {
+				return resp.json();
+			}).then(data => {
+				data.forEach(geoTile => {
+					let polygon = L.polygon(geoTile.coords)
+						.addTo(geoMap);
+
+					polygon.bindPopup(`ID: ${geoTile.id}`);
+				});
+			})
 		</script>
 	</body>
 </html>
