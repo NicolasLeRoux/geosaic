@@ -84,8 +84,8 @@ module.exports.getRootNeighbors = function getRootNeighbors (node, index, array,
  */
 module.exports.buildGeoTile = function buildGeoTile (coord, step) {
 	const coords = [coord];
-	const nextLat = +calculNextLatitude(coord, step).toFixed(6);
-	const nextLon = +calculNextLongitude(coord, step).toFixed(6);
+	const nextLat = calculNextLatitude(coord, step)
+	const nextLon = calculNextLongitude(coord, step);
 
 	// Top Right
 	coords.push({
