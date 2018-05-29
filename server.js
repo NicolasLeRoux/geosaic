@@ -13,6 +13,10 @@ app.get('/src/**/*', (req, res) => {
 	res.sendFile(path.join(__dirname, req.url));
 });
 
+app.get('/node_modules/**/*', (req, res) => {
+	res.sendFile(path.join(__dirname, req.url));
+});
+
 app.get('/api/test', (req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	res.send(JSON.stringify({a: 1}));
