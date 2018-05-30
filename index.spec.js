@@ -3,7 +3,9 @@ const {
 	buildGrid,
 	getRootNeighbors,
 	buildGeoTile,
-	getNeighbors
+	getNeighbors,
+    isSameLatitude,
+    isSameLongitude
 } = require('./index.js');
 const {
 	calculEarthGeodesic
@@ -217,4 +219,190 @@ describe(`In the index module,`, () => {
 			expect(tile.id).to.equal(33);
 		});
 	});
+
+	describe(`The method 'getNeighbors',`, () => {
+        const GEO_TILE_001 = {
+            coords: [
+                {
+                    lat: 0.01,
+                    lon: 0.01
+                },
+                {
+                    lat: 0.02,
+                    lon: 0.01
+                },
+                {
+                    lat: 0.02,
+                    lon: 0.02
+                },
+                {
+                    lat: 0.01,
+                    lon: 0.02
+                }
+            ]
+        };
+
+        const GEO_TILE_002 = {
+            coords: [
+                {
+                    lat: 0.02,
+                    lon: 0.01
+                },
+                {
+                    lat: 0.03,
+                    lon: 0.01
+                },
+                {
+                    lat: 0.03,
+                    lon: 0.02
+                },
+                {
+                    lat: 0.02,
+                    lon: 0.01
+                }
+            ]
+        };
+
+        it(`Should return an empty array other geoTile.`, () => {
+            const array = getNeighbors([
+                GEO_TILE_001
+            ], GEO_TILE_001);
+
+            expect(array.length).to.equal(0);
+        });
+
+        it(`Should return one element if there is a tile is on the right.`, () => {
+            const array = getNeighbors([
+                GEO_TILE_001,
+                GEO_TILE_002
+            ], GEO_TILE_001);
+
+            expect(array.length).to.equal(1);
+        });
+    });
+
+	describe(`The method 'isSameLatitude',`, () => {
+        const GEO_TILE_001 = {
+            coords: [
+                {
+                    lat: 0.05,
+                    lon: 0.05
+                },
+                {
+                    lat: 0.06,
+                    lon: 0.05
+                },
+                {
+                    lat: 0.06,
+                    lon: 0.06
+                },
+                {
+                    lat: 0.05,
+                    lon: 0.06
+                }
+            ]
+        };
+
+        const GEO_TILE_002 = {
+            coords: [
+                {
+                    lat: 0.04,
+                    lon: 0.05
+                },
+                {
+                    lat: 0.05,
+                    lon: 0.05
+                },
+                {
+                    lat: 0.05,
+                    lon: 0.06
+                },
+                {
+                    lat: 0.04,
+                    lon: 0.06
+                }
+            ]
+        };
+
+        const GEO_TILE_003 = {
+            coords: [
+                {
+                    lat: 0.06,
+                    lon: 0.05
+                },
+                {
+                    lat: 0.07,
+                    lon: 0.05
+                },
+                {
+                    lat: 0.07,
+                    lon: 0.06
+                },
+                {
+                    lat: 0.06,
+                    lon: 0.06
+                }
+            ]
+        };
+
+        it(`Should be true if the top side are on the same latitude.`, () => {
+            expect(isSameLatitude(GEO_TILE_001, GEO_TILE_002)).to.be.ok();
+        });
+
+        it(`Should be true if the bottom side are on the same latitude.`, () => {
+            expect(isSameLatitude(GEO_TILE_001, GEO_TILE_003)).to.be.ok();
+        });
+
+        it(`Should be false if the top or the bottom side are on different latitude.`, () => {
+            expect(isSameLatitude(GEO_TILE_002, GEO_TILE_003)).to.be.ko();
+        });
+    });
+
+	describe(`The method 'isSameLongitude',`, () => {
+        const GEO_TILE_001 = {
+            coords: [
+                {
+                    lat: 0.01,
+                    lon: 0.01
+                },
+                {
+                    lat: 0.02,
+                    lon: 0.01
+                },
+                {
+                    lat: 0.02,
+                    lon: 0.02
+                },
+                {
+                    lat: 0.01,
+                    lon: 0.02
+                }
+            ]
+        };
+
+        const GEO_TILE_002 = {
+            coords: [
+                {
+                    lat: 0.01,
+                    lon: 0.01
+                },
+                {
+                    lat: 0.02,
+                    lon: 0.01
+                },
+                {
+                    lat: 0.02,
+                    lon: 0.02
+                },
+                {
+                    lat: 0.01,
+                    lon: 0.02
+                }
+            ]
+        };
+
+        it(`Should ...`, () => {
+            expect(isSameLongitude(GEO_TILE_001, GEO_TILE_002)).to.be.ok();
+        });
+    });
 });

@@ -109,3 +109,46 @@ module.exports.buildGeoTile = function buildGeoTile (coord, step, id) {
 		step
 	};
 }
+
+/**
+ * Util to return an array of neighbors for a given GeoTile.
+ * @param geoTiles An array of all GeoTile to compute
+ * @param current The GoeTile to analyze
+ * @return The array of neighbors
+ */
+module.exports.getNeighbors = function getNeighbors (geoTiles, current) {
+    return geoTiles.filter(tile => {
+        let result = false;
+
+        // Remove current element
+        if (current.id === tile.id) {
+            return false;
+        }
+
+        // Tiles on the same longitude
+
+        // Tiles on the same latitude
+
+        return result;
+    });
+}
+
+/**
+ * Util to evaluate if the given tiles have a side on the same latitude.
+ * @param tileA The first tile
+ * @param tileB The second tile
+ * @return A boolean...
+ */
+module.exports.isSameLatitude = function isSameLatitude (tileA, tileB) {
+    return false;
+}
+
+/**
+ * Util to evaluate if the given tiles have a side on the same longitude.
+ * @param tileA The first tile
+ * @param tileB The second tile
+ * @return A boolean...
+ */
+module.exports.isSameLongitude = function isSameLongitude (tileA, tileB) {
+    return false;
+}
