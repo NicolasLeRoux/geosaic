@@ -462,8 +462,12 @@ describe(`In the index module,`, () => {
             expect(isTopCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_01_02)).to.be.ok();
         });
 
+        it(`Should be true for 2 GeoTiles on the same latitude (bis).`, () => {
+            expect(isTopCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_02_02)).to.be.ok();
+        });
+
         it(`Should be false for 2 GeoTiles on different latitude.`, () => {
-            expect(isTopCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_02_02)).not.to.be.ok();
+            expect(isTopCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_03_03)).not.to.be.ok();
         });
     });
 
