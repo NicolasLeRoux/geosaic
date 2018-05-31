@@ -4,8 +4,8 @@ const {
 	getRootNeighbors,
 	buildGeoTile,
 	getNeighbors,
-    isSameLatitude,
-    isSameLongitude
+    isAdjacentLatitude,
+    isAdjacentLongitude
 } = require('./index.js');
 const {
 	calculEarthGeodesic
@@ -281,7 +281,7 @@ describe(`In the index module,`, () => {
         });
     });
 
-	describe(`The method 'isSameLatitude',`, () => {
+	describe(`The method 'isAdjacentLatitude',`, () => {
         const GEO_TILE_001 = {
             coords: [
                 {
@@ -346,19 +346,19 @@ describe(`In the index module,`, () => {
         };
 
         it(`Should be true if the top side are on the same latitude.`, () => {
-            expect(isSameLatitude(GEO_TILE_001, GEO_TILE_002)).to.be.ok();
+            expect(isAdjacentLatitude(GEO_TILE_001, GEO_TILE_002)).to.be.ok();
         });
 
         it(`Should be true if the bottom side are on the same latitude.`, () => {
-            expect(isSameLatitude(GEO_TILE_001, GEO_TILE_003)).to.be.ok();
+            expect(isAdjacentLatitude(GEO_TILE_001, GEO_TILE_003)).to.be.ok();
         });
 
         it(`Should be false if the top or the bottom side are on different latitude.`, () => {
-            expect(isSameLatitude(GEO_TILE_002, GEO_TILE_003)).to.be.ko();
+            expect(isAdjacentLatitude(GEO_TILE_002, GEO_TILE_003)).not.to.be.ok();
         });
     });
 
-	describe(`The method 'isSameLongitude',`, () => {
+	describe(`The method 'isAdjacentLongitude',`, () => {
         const GEO_TILE_001 = {
             coords: [
                 {
@@ -402,7 +402,7 @@ describe(`In the index module,`, () => {
         };
 
         it(`Should ...`, () => {
-            expect(isSameLongitude(GEO_TILE_001, GEO_TILE_002)).to.be.ok();
+            expect(isAdjacentLongitude(GEO_TILE_001, GEO_TILE_002)).to.be.ok();
         });
     });
 });

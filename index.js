@@ -134,21 +134,21 @@ module.exports.getNeighbors = function getNeighbors (geoTiles, current) {
 }
 
 /**
- * Util to evaluate if the given tiles have a side on the same latitude.
+ * Util to evaluate if the given tiles have a side on an adjacent latitude.
  * @param tileA The first tile
  * @param tileB The second tile
  * @return A boolean...
  */
-module.exports.isSameLatitude = function isSameLatitude (tileA, tileB) {
+module.exports.isAdjacentLatitude = function isAdjacentLatitude (tileA, tileB) {
     return false;
 }
 
 /**
- * Util to evaluate if the given tiles have a side on the same longitude.
+ * Util to evaluate if the given tiles have a side on an adjacent longitude.
  * @param tileA The first tile
  * @param tileB The second tile
  * @return A boolean...
  */
-module.exports.isSameLongitude = function isSameLongitude (tileA, tileB) {
+module.exports.isAdjacentLongitude = function isAdjacentLongitude (tileA, tileB) {
     return false;
 }
