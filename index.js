@@ -16,18 +16,18 @@ module.exports.buildGrid = function buildGrid (coordStart, coordEnd, step) {
 		lon = coordStart.lon,
 		coord;
 
-	while (lat >= coordEnd.lat) {
-		while (lon <= coordEnd.lon) {
+    while (lon <= coordEnd.lon) {
+        while (lat >= coordEnd.lat) {
 			coord = {
 				lat,
 				lon
 			};
 			result.push(coord);
 
-			lon = calculNextLongitude(coord, step);
+            lat = calculNextLatitude(coord, step);
 		}
-		lat = calculNextLatitude(coord, step);
-		lon = coordStart.lon;
+        lon = calculNextLongitude(coord, step);
+		lat = coordStart.lat;
 	}
 
 	return result;
