@@ -154,3 +154,27 @@ module.exports.isAdjacentLongitude = function isAdjacentLongitude (tileA, tileB)
     return tileA.coords[0].lon === tileB.coords[3].lon ||
         tileA.coords[3].lon === tileB.coords[0].lon;
 }
+
+/**
+ * Util to evaluate if the target tile has a top corner inside the latitude band
+ * of the reference tile.
+ * @param refTile The first tile used to simulate the band
+ * @param targetTile The second tile, aka tile to evaluate
+ * @return A state for the test
+ */
+module.exports.isTopCornerInsideTileBandLatitude = function isTopCornerInsideTileBandLatitude (refTile, targetTile) {
+    return refTile.coords[0].lat <= targetTile.coords[0].lat &&
+        refTile.coords[1].lat > targetTile.coords[0].lat;
+}
+
+/**
+ * Util to evaluate if the target tile has a bottom corner inside the latitude band
+ * of the reference tile.
+ * @param refTile The first tile used to simulate the band
+ * @param targetTile The second tile, aka tile to evaluate
+ * @return A state for the test
+ */
+module.exports.isBottomCornerInsideTileBandLatitude = function isBottomCornerInsideTileBandLatitude (refTile, targetTile) {
+    return refTile.coords[0].lat <= targetTile.coords[1].lat &&
+        refTile.coords[1].lat > targetTile.coords[1].lat;
+}

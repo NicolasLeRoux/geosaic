@@ -5,7 +5,9 @@ const {
 	buildGeoTile,
 	getNeighbors,
     isAdjacentLatitude,
-    isAdjacentLongitude
+    isAdjacentLongitude,
+    isTopCornerInsideTileBandLatitude,
+    isBottomCornerInsideTileBandLatitude
 } = require('./index.js');
 const {
 	calculEarthGeodesic
@@ -241,6 +243,27 @@ describe(`In the index module,`, () => {
         ]
     };
 
+    const GEO_TILE_01_02 = {
+        coords: [
+            {
+                lat: 0.05,
+                lon: 0.06
+            },
+            {
+                lat: 0.05,
+                lon: 0.07
+            },
+            {
+                lat: 0.06,
+                lon: 0.07
+            },
+            {
+                lat: 0.06,
+                lon: 0.06
+            }
+        ]
+    };
+
     const GEO_TILE_02_02 = {
         coords: [
             {
@@ -326,6 +349,26 @@ describe(`In the index module,`, () => {
 
         it(`Should be false if the top or the bottom side are on different latitude.`, () => {
             expect(isAdjacentLongitude(GEO_TILE_01_01, GEO_TILE_03_03)).not.to.be.ok();
+        });
+    });
+
+	describe(`The method 'isTopCornerInsideTileBandLatitude',`, () => {
+        it(`Should be true for 2 GeoTiles on the same latitude.`, () => {
+            expect(isTopCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_01_02)).to.be.ok();
+        });
+
+        it(`Should be false for 2 GeoTiles on different latitude.`, () => {
+            expect(isTopCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_02_02)).not.to.be.ok();
+        });
+    });
+
+	describe(`The method 'isBottomCornerInsideTileBandLatitude',`, () => {
+        it(`Should be true for 2 GeoTiles on the same latitude.`, () => {
+            expect(isBottomCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_01_02)).to.be.ok();
+        });
+
+        it(`Should be false for 2 GeoTiles on different latitude.`, () => {
+            expect(isBottomCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_02_02)).not.to.be.ok();
         });
     });
 });
