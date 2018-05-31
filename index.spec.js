@@ -220,155 +220,112 @@ describe(`In the index module,`, () => {
 		});
 	});
 
+    const GEO_TILE_01_01 = {
+        coords: [
+            {
+                lat: 0.05,
+                lon: 0.05
+            },
+            {
+                lat: 0.06,
+                lon: 0.05
+            },
+            {
+                lat: 0.06,
+                lon: 0.06
+            },
+            {
+                lat: 0.05,
+                lon: 0.06
+            }
+        ]
+    };
+
+    const GEO_TILE_02_02 = {
+        coords: [
+            {
+                lat: 0.06,
+                lon: 0.06
+            },
+            {
+                lat: 0.07,
+                lon: 0.06
+            },
+            {
+                lat: 0.07,
+                lon: 0.07
+            },
+            {
+                lat: 0.06,
+                lon: 0.07
+            }
+        ]
+    };
+
+    const GEO_TILE_03_03 = {
+        coords: [
+            {
+                lat: 0.07,
+                lon: 0.07
+            },
+            {
+                lat: 0.08,
+                lon: 0.07
+            },
+            {
+                lat: 0.08,
+                lon: 0.08
+            },
+            {
+                lat: 0.07,
+                lon: 0.08
+            }
+        ]
+    };
+
 	describe(`The method 'getNeighbors',`, () => {
-        const GEO_TILE_001 = {
-            coords: [
-                {
-                    lat: 0.01,
-                    lon: 0.01
-                },
-                {
-                    lat: 0.02,
-                    lon: 0.01
-                },
-                {
-                    lat: 0.02,
-                    lon: 0.02
-                },
-                {
-                    lat: 0.01,
-                    lon: 0.02
-                }
-            ]
-        };
-
-        const GEO_TILE_002 = {
-            coords: [
-                {
-                    lat: 0.02,
-                    lon: 0.01
-                },
-                {
-                    lat: 0.03,
-                    lon: 0.01
-                },
-                {
-                    lat: 0.03,
-                    lon: 0.02
-                },
-                {
-                    lat: 0.02,
-                    lon: 0.01
-                }
-            ]
-        };
-
         it(`Should return an empty array other geoTile.`, () => {
             const array = getNeighbors([
-                GEO_TILE_001
-            ], GEO_TILE_001);
+                GEO_TILE_01_01
+            ], GEO_TILE_01_01);
 
             expect(array.length).to.equal(0);
         });
 
         it(`Should return one element if there is a tile is on the right.`, () => {
             const array = getNeighbors([
-                GEO_TILE_001,
-                GEO_TILE_002
-            ], GEO_TILE_001);
+                GEO_TILE_01_01,
+                GEO_TILE_02_02
+            ], GEO_TILE_01_01);
 
             expect(array.length).to.equal(1);
         });
     });
-
-    const GEO_TILE_001 = {
-        coords: [
-            {
-                lat: 0.05,
-                lon: 0.05
-            },
-            {
-                lat: 0.06,
-                lon: 0.05
-            },
-            {
-                lat: 0.06,
-                lon: 0.06
-            },
-            {
-                lat: 0.05,
-                lon: 0.06
-            }
-        ]
-    };
-
-    const GEO_TILE_002 = {
-        coords: [
-            {
-                lat: 0.06,
-                lon: 0.06
-            },
-            {
-                lat: 0.07,
-                lon: 0.06
-            },
-            {
-                lat: 0.07,
-                lon: 0.07
-            },
-            {
-                lat: 0.06,
-                lon: 0.07
-            }
-        ]
-    };
-
-    const GEO_TILE_003 = {
-        coords: [
-            {
-                lat: 0.07,
-                lon: 0.07
-            },
-            {
-                lat: 0.08,
-                lon: 0.07
-            },
-            {
-                lat: 0.08,
-                lon: 0.08
-            },
-            {
-                lat: 0.07,
-                lon: 0.08
-            }
-        ]
-    };
-
 	describe(`The method 'isAdjacentLatitude',`, () => {
         it(`Should be true if the top side are on the same latitude.`, () => {
-            expect(isAdjacentLatitude(GEO_TILE_002, GEO_TILE_001)).to.be.ok();
+            expect(isAdjacentLatitude(GEO_TILE_02_02, GEO_TILE_01_01)).to.be.ok();
         });
 
         it(`Should be true if the bottom side are on the same latitude.`, () => {
-            expect(isAdjacentLatitude(GEO_TILE_002, GEO_TILE_003)).to.be.ok();
+            expect(isAdjacentLatitude(GEO_TILE_02_02, GEO_TILE_03_03)).to.be.ok();
         });
 
         it(`Should be false if the top or the bottom side are on different latitude.`, () => {
-            expect(isAdjacentLatitude(GEO_TILE_001, GEO_TILE_003)).not.to.be.ok();
+            expect(isAdjacentLatitude(GEO_TILE_01_01, GEO_TILE_03_03)).not.to.be.ok();
         });
     });
 
 	describe(`The method 'isAdjacentLongitude',`, () => {
         it(`Should be true if the top side are on the same latitude.`, () => {
-            expect(isAdjacentLongitude(GEO_TILE_002, GEO_TILE_001)).to.be.ok();
+            expect(isAdjacentLongitude(GEO_TILE_02_02, GEO_TILE_01_01)).to.be.ok();
         });
 
         it(`Should be true if the bottom side are on the same latitude.`, () => {
-            expect(isAdjacentLongitude(GEO_TILE_002, GEO_TILE_003)).to.be.ok();
+            expect(isAdjacentLongitude(GEO_TILE_02_02, GEO_TILE_03_03)).to.be.ok();
         });
 
         it(`Should be false if the top or the bottom side are on different latitude.`, () => {
-            expect(isAdjacentLongitude(GEO_TILE_001, GEO_TILE_003)).not.to.be.ok();
+            expect(isAdjacentLongitude(GEO_TILE_01_01, GEO_TILE_03_03)).not.to.be.ok();
         });
     });
 });
