@@ -229,16 +229,16 @@ describe(`In the index module,`, () => {
                 lon: 0.05
             },
             {
-                lat: 0.06,
-                lon: 0.05
-            },
-            {
-                lat: 0.06,
-                lon: 0.06
-            },
-            {
                 lat: 0.05,
                 lon: 0.06
+            },
+            {
+                lat: 0.06,
+                lon: 0.06
+            },
+            {
+                lat: 0.06,
+                lon: 0.05
             }
         ]
     };
@@ -264,6 +264,48 @@ describe(`In the index module,`, () => {
         ]
     };
 
+    const GEO_TILE_01_03 = {
+        coords: [
+            {
+                lat: 0.05,
+                lon: 0.07
+            },
+            {
+                lat: 0.05,
+                lon: 0.08
+            },
+            {
+                lat: 0.06,
+                lon: 0.08
+            },
+            {
+                lat: 0.06,
+                lon: 0.07
+            }
+        ]
+    };
+
+    const GEO_TILE_02_01 = {
+        coords: [
+            {
+                lat: 0.06,
+                lon: 0.05
+            },
+            {
+                lat: 0.06,
+                lon: 0.06
+            },
+            {
+                lat: 0.07,
+                lon: 0.06
+            },
+            {
+                lat: 0.07,
+                lon: 0.05
+            }
+        ]
+    };
+
     const GEO_TILE_02_02 = {
         coords: [
             {
@@ -271,6 +313,65 @@ describe(`In the index module,`, () => {
                 lon: 0.06
             },
             {
+                lat: 0.06,
+                lon: 0.07
+            },
+            {
+                lat: 0.07,
+                lon: 0.07
+            },
+            {
+                lat: 0.07,
+                lon: 0.06
+            }
+        ]
+    };
+
+    const GEO_TILE_02_03 = {
+        coords: [
+            {
+                lat: 0.06,
+                lon: 0.07
+            },
+            {
+                lat: 0.06,
+                lon: 0.08
+            },
+            {
+                lat: 0.07,
+                lon: 0.08
+            },
+            {
+                lat: 0.07,
+                lon: 0.07
+            }
+        ]
+    };
+
+    const GEO_TILE_03_01 = {
+        coords: [
+            {
+                lat: 0.07,
+                lon: 0.05
+            },
+            {
+                lat: 0.07,
+                lon: 0.06
+            },
+            {
+                lat: 0.08,
+                lon: 0.06
+            },
+            {
+                lat: 0.08,
+                lon: 0.05
+            }
+        ]
+    };
+
+    const GEO_TILE_03_02 = {
+        coords: [
+            {
                 lat: 0.07,
                 lon: 0.06
             },
@@ -279,8 +380,12 @@ describe(`In the index module,`, () => {
                 lon: 0.07
             },
             {
-                lat: 0.06,
+                lat: 0.08,
                 lon: 0.07
+            },
+            {
+                lat: 0.08,
+                lon: 0.06
             }
         ]
     };
@@ -292,16 +397,16 @@ describe(`In the index module,`, () => {
                 lon: 0.07
             },
             {
-                lat: 0.08,
-                lon: 0.07
-            },
-            {
-                lat: 0.08,
-                lon: 0.08
-            },
-            {
                 lat: 0.07,
                 lon: 0.08
+            },
+            {
+                lat: 0.08,
+                lon: 0.08
+            },
+            {
+                lat: 0.08,
+                lon: 0.07
             }
         ]
     };
