@@ -250,6 +250,20 @@ const splitGeoTile = function splitGeoTile (tile) {
 	});
 };
 
+/**
+ * Util to get the center of a GeoTile.
+ * @param tile The GeoTile to evaluate
+ * @return The coord of the center of the GeoTile
+ */
+const getCenterCoord = function getCenterCoord (tile) {
+	const step = Math.round(tile.step / 2);
+
+	return {
+		lat: calculNextLatitude(tile.coords[0], step),
+		lon: calculNextLongitude(tile.coords[0], step),
+	};
+}
+
 module.exports = {
 	buildGrid,
 	buildGeoTile,
@@ -264,5 +278,6 @@ module.exports = {
 	isTileBandLongitudeInsideBiggerTile,
 	isSmallerTileInsideTileBandLatitude,
 	isSmallerTileInsideTileBandLongitude,
-	splitGeoTile
+	splitGeoTile,
+	getCenterCoord
 };

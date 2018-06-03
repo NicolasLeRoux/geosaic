@@ -13,7 +13,8 @@ const {
 	isTileBandLongitudeInsideBiggerTile,
 	isSmallerTileInsideTileBandLatitude,
 	isSmallerTileInsideTileBandLongitude,
-	splitGeoTile
+	splitGeoTile,
+	getCenterCoord
 } = require('./index.js');
 const {
 	calculEarthGeodesic,
@@ -676,6 +677,27 @@ describe(`In the index module,`, () => {
 			const array = splitGeoTile(GEO_TILE_TO_SPLIT_02);
 
 			expect(array[0].step).to.equal(5);
+		});
+	});
+
+	describe(`The method 'getCenterCoord',`, () => {
+		const GEO_TILE_CENTER = {
+			step: 100,
+			coords: [
+				{
+					lat: 0.05,
+					lon: 0.05
+				}
+			]
+		};
+
+		it(`Should return the center coord of the tile.`, () => {
+			const coord = getCenterCoord(GEO_TILE_CENTER);
+
+			expect(coord).to.eql({
+				lat: calculNextLatitude(GEO_TILE_CENTER.coords[0], 50),
+				lon: calculNextLongitude(GEO_TILE_CENTER.coords[0], 50)
+			});
 		});
 	});
 });
