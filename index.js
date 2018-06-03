@@ -140,8 +140,8 @@ module.exports.getNeighbors = function getNeighbors (geoTiles, current) {
  * @return A state for the test
  */
 module.exports.isAdjacentLatitude = function isAdjacentLatitude (tileA, tileB) {
-	return tileA.coords[0].lat === tileB.coords[1].lat ||
-		tileA.coords[1].lat === tileB.coords[0].lat;
+	return tileA.coords[0].lat === tileB.coords[3].lat ||
+		tileA.coords[3].lat === tileB.coords[0].lat;
 }
 
 /**
@@ -151,8 +151,8 @@ module.exports.isAdjacentLatitude = function isAdjacentLatitude (tileA, tileB) {
  * @return A state for the test
  */
 module.exports.isAdjacentLongitude = function isAdjacentLongitude (tileA, tileB) {
-	return tileA.coords[0].lon === tileB.coords[3].lon ||
-		tileA.coords[3].lon === tileB.coords[0].lon;
+	return tileA.coords[0].lon === tileB.coords[1].lon ||
+		tileA.coords[1].lon === tileB.coords[0].lon;
 }
 
 /**
