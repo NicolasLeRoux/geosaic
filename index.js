@@ -164,7 +164,7 @@ module.exports.isAdjacentLongitude = function isAdjacentLongitude (tileA, tileB)
  */
 module.exports.isTopCornerInsideTileBandLatitude = function isTopCornerInsideTileBandLatitude (refTile, targetTile) {
 	return refTile.coords[0].lat <= targetTile.coords[0].lat &&
-		refTile.coords[3].lat >= targetTile.coords[0].lat;
+		refTile.coords[3].lat > targetTile.coords[0].lat;
 }
 
 /**
@@ -175,6 +175,6 @@ module.exports.isTopCornerInsideTileBandLatitude = function isTopCornerInsideTil
  * @return A state for the test
  */
 module.exports.isBottomCornerInsideTileBandLatitude = function isBottomCornerInsideTileBandLatitude (refTile, targetTile) {
-	return refTile.coords[0].lat <= targetTile.coords[3].lat &&
+	return refTile.coords[0].lat < targetTile.coords[3].lat &&
 		refTile.coords[3].lat >= targetTile.coords[3].lat;
 }
