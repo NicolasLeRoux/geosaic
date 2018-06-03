@@ -12,10 +12,13 @@ const {
 	isTileBandLatitudeInsideBiggerTile,
 	isTileBandLongitudeInsideBiggerTile,
 	isSmallerTileInsideTileBandLatitude,
-	isSmallerTileInsideTileBandLongitude
+	isSmallerTileInsideTileBandLongitude,
+	splitGeoTile
 } = require('./index.js');
 const {
-	calculEarthGeodesic
+	calculEarthGeodesic,
+	calculNextLatitude,
+	calculNextLongitude
 } = require('./lib/math.js');
 
 describe(`In the index module,`, () => {
@@ -608,6 +611,71 @@ describe(`In the index module,`, () => {
 
 		it(`Should be false for 2 GeoTiles on different longitude.`, () => {
 			expect(isSmallerTileInsideTileBandLongitude(GEO_TILE_01_01, GEO_TILE_02_02)).not.to.be.ok();
+		});
+	});
+
+	describe(`The method 'splitGeoTile',`, () => {
+		const step_100 = 100;
+		const step_25 = 25;
+		const coordStart = {
+			lat: 0.05,
+			lon: 0.05
+		};
+
+		const GEO_TILE_TO_SPLIT_01 = {
+			id: 'step_100',
+			step: step_100,
+			coords: [
+				coordStart,
+				null,
+				{
+					lat: calculNextLatitude(coordStart, step_100),
+					lon: calculNextLongitude(coordStart, step_100)
+				}
+			]
+		};
+
+		const GEO_TILE_TO_SPLIT_02 = {
+			id: 'step_25',
+			step: step_25,
+			coords: [
+				coordStart,
+				null,
+				{
+					lat: calculNextLatitude(coordStart, step_25),
+					lon: calculNextLongitude(coordStart, step_25)
+				}
+			]
+		};
+
+		it(`Should split the tile in 4 elements.`, () => {
+			const array = splitGeoTile(GEO_TILE_TO_SPLIT_01);
+
+			expect(array.length).to.equal(4);
+		});
+
+		it(`Should split the tile in element with a step of 50.`, () => {
+			const array = splitGeoTile(GEO_TILE_TO_SPLIT_01);
+
+			expect(array[0].step).to.equal(50);
+		});
+
+		it(`Should have the same bottom right corner.`, () => {
+			const array = splitGeoTile(GEO_TILE_TO_SPLIT_01);
+
+			expect(array[3].coords[2]).to.eql(GEO_TILE_TO_SPLIT_01.coords[2]);
+		});
+
+		it(`Should split the tile in 25 elements.`, () => {
+			const array = splitGeoTile(GEO_TILE_TO_SPLIT_02);
+
+			expect(array.length).to.equal(25);
+		});
+
+		it(`Should split the tile in element with a step of 5.`, () => {
+			const array = splitGeoTile(GEO_TILE_TO_SPLIT_02);
+
+			expect(array[0].step).to.equal(5);
 		});
 	});
 });

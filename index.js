@@ -1,6 +1,7 @@
 const {
 	calculNextLatitude,
-	calculNextLongitude
+	calculNextLongitude,
+	getBiggestDivisor
 } = require('./lib/math.js');
 
 /**
@@ -16,8 +17,8 @@ const buildGrid = function buildGrid (coordStart, coordEnd, step) {
 		lon = coordStart.lon,
 		coord;
 
-	while (lon <= coordEnd.lon) {
-		while (lat >= coordEnd.lat) {
+	while (lon < coordEnd.lon) {
+		while (lat > coordEnd.lat) {
 			coord = {
 				lat,
 				lon
@@ -235,6 +236,20 @@ const isSmallerTileInsideTileBandLongitude = function isSmallerTileInsideTileBan
 		refTile.coords[1].lon <= targetTile.coords[1].lon;
 };
 
+/**
+ * Util to split a GeoTile in an array of smaller GeoTile.
+ * @param tile The GeoTile to split
+ * @return An array of smaller GeoTile
+ */
+const splitGeoTile = function splitGeoTile (tile) {
+	const step = getBiggestDivisor(tile.step);
+	const array = buildGrid(tile.coords[0], tile.coords[2], step);
+
+	return array.map(coord => {
+		return buildGeoTile(coord, step);
+	});
+};
+
 module.exports = {
 	buildGrid,
 	buildGeoTile,
@@ -248,5 +263,6 @@ module.exports = {
 	isTileBandLatitudeInsideBiggerTile,
 	isTileBandLongitudeInsideBiggerTile,
 	isSmallerTileInsideTileBandLatitude,
-	isSmallerTileInsideTileBandLongitude
+	isSmallerTileInsideTileBandLongitude,
+	splitGeoTile
 };
