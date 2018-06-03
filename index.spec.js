@@ -7,7 +7,9 @@ const {
 	isAdjacentLatitude,
 	isAdjacentLongitude,
 	isTopCornerInsideTileBandLatitude,
-	isBottomCornerInsideTileBandLatitude
+	isBottomCornerInsideTileBandLatitude,
+	isLeftCornerInsideTileBandLongitude,
+	isRightCornerInsideTileBandLongitude
 } = require('./index.js');
 const {
 	calculEarthGeodesic
@@ -482,6 +484,34 @@ describe(`In the index module,`, () => {
 
 		it(`Should be false for 2 GeoTiles on different latitude  (by far).`, () => {
 			expect(isBottomCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_03_03)).not.to.be.ok();
+		});
+	});
+
+	describe(`The method 'isLeftCornerInsideTileBandLongitude',`, () => {
+		it(`Should be true for 2 GeoTiles on the same longitude.`, () => {
+			expect(isLeftCornerInsideTileBandLongitude(GEO_TILE_01_01, GEO_TILE_02_01)).to.be.ok();
+		});
+
+		it(`Should be false for 2 GeoTiles on different longitude.`, () => {
+			expect(isLeftCornerInsideTileBandLongitude(GEO_TILE_01_01, GEO_TILE_02_02)).not.to.be.ok();
+		});
+
+		it(`Should be false for 2 GeoTiles on different longitude (by far).`, () => {
+			expect(isLeftCornerInsideTileBandLongitude(GEO_TILE_01_01, GEO_TILE_03_03)).not.to.be.ok();
+		});
+	});
+
+	describe(`The method 'isRightCornerInsideTileBandLongitude',`, () => {
+		it(`Should be true for 2 GeoTiles on the same longitude.`, () => {
+			expect(isRightCornerInsideTileBandLongitude(GEO_TILE_01_01, GEO_TILE_02_01)).to.be.ok();
+		});
+
+		it(`Should be false for 2 GeoTiles on different longitude.`, () => {
+			expect(isRightCornerInsideTileBandLongitude(GEO_TILE_01_01, GEO_TILE_02_02)).not.to.be.ok();
+		});
+
+		it(`Should be false for 2 GeoTiles on different longitude  (by far).`, () => {
+			expect(isRightCornerInsideTileBandLongitude(GEO_TILE_01_01, GEO_TILE_03_03)).not.to.be.ok();
 		});
 	});
 });

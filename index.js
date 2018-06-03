@@ -178,3 +178,27 @@ module.exports.isBottomCornerInsideTileBandLatitude = function isBottomCornerIns
 	return refTile.coords[0].lat < targetTile.coords[3].lat &&
 		refTile.coords[3].lat >= targetTile.coords[3].lat;
 }
+
+/**
+ * Util to evaluate if the target tile has a left corner inside the longitude band
+ * of the reference tile.
+ * @param refTile The first tile used to simulate the band
+ * @param targetTile The second tile, aka tile to evaluate
+ * @return A state for the test
+ */
+module.exports.isLeftCornerInsideTileBandLongitude = function isLeftCornerInsideTileBandLongitude (refTile, targetTile) {
+	return refTile.coords[0].lon <= targetTile.coords[0].lon &&
+		refTile.coords[1].lon > targetTile.coords[0].lon;
+}
+
+/**
+ * Util to evaluate if the target tile has a right corner inside the longitude band
+ * of the reference tile.
+ * @param refTile The first tile used to simulate the band
+ * @param targetTile The second tile, aka tile to evaluate
+ * @return A state for the test
+ */
+module.exports.isRightCornerInsideTileBandLongitude = function isRightCornerInsideTileBandLongitude (refTile, targetTile) {
+	return refTile.coords[0].lon < targetTile.coords[1].lon &&
+		refTile.coords[1].lon >= targetTile.coords[1].lon;
+}
