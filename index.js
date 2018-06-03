@@ -16,17 +16,17 @@ module.exports.buildGrid = function buildGrid (coordStart, coordEnd, step) {
 		lon = coordStart.lon,
 		coord;
 
-    while (lon <= coordEnd.lon) {
-        while (lat >= coordEnd.lat) {
+	while (lon <= coordEnd.lon) {
+		while (lat >= coordEnd.lat) {
 			coord = {
 				lat,
 				lon
 			};
 			result.push(coord);
 
-            lat = calculNextLatitude(coord, step);
+			lat = calculNextLatitude(coord, step);
 		}
-        lon = calculNextLongitude(coord, step);
+		lon = calculNextLongitude(coord, step);
 		lat = coordStart.lat;
 	}
 
@@ -117,20 +117,20 @@ module.exports.buildGeoTile = function buildGeoTile (coord, step, id) {
  * @return The array of neighbors
  */
 module.exports.getNeighbors = function getNeighbors (geoTiles, current) {
-    return geoTiles.filter(tile => {
-        let result = false;
+	return geoTiles.filter(tile => {
+		let result = false;
 
-        // Remove current element
-        if (current.id === tile.id) {
-            return false;
-        }
+		// Remove current element
+		if (current.id === tile.id) {
+			return false;
+		}
 
-        // Tiles on the same longitude
+		// Tiles on the same longitude
 
-        // Tiles on the same latitude
+		// Tiles on the same latitude
 
-        return result;
-    });
+		return result;
+	});
 }
 
 /**
@@ -140,8 +140,8 @@ module.exports.getNeighbors = function getNeighbors (geoTiles, current) {
  * @return A state for the test
  */
 module.exports.isAdjacentLatitude = function isAdjacentLatitude (tileA, tileB) {
-    return tileA.coords[0].lat === tileB.coords[1].lat ||
-        tileA.coords[1].lat === tileB.coords[0].lat;
+	return tileA.coords[0].lat === tileB.coords[1].lat ||
+		tileA.coords[1].lat === tileB.coords[0].lat;
 }
 
 /**
@@ -151,8 +151,8 @@ module.exports.isAdjacentLatitude = function isAdjacentLatitude (tileA, tileB) {
  * @return A state for the test
  */
 module.exports.isAdjacentLongitude = function isAdjacentLongitude (tileA, tileB) {
-    return tileA.coords[0].lon === tileB.coords[3].lon ||
-        tileA.coords[3].lon === tileB.coords[0].lon;
+	return tileA.coords[0].lon === tileB.coords[3].lon ||
+		tileA.coords[3].lon === tileB.coords[0].lon;
 }
 
 /**
@@ -163,8 +163,8 @@ module.exports.isAdjacentLongitude = function isAdjacentLongitude (tileA, tileB)
  * @return A state for the test
  */
 module.exports.isTopCornerInsideTileBandLatitude = function isTopCornerInsideTileBandLatitude (refTile, targetTile) {
-    return refTile.coords[0].lat <= targetTile.coords[0].lat &&
-        refTile.coords[3].lat >= targetTile.coords[0].lat;
+	return refTile.coords[0].lat <= targetTile.coords[0].lat &&
+		refTile.coords[3].lat >= targetTile.coords[0].lat;
 }
 
 /**
@@ -175,6 +175,6 @@ module.exports.isTopCornerInsideTileBandLatitude = function isTopCornerInsideTil
  * @return A state for the test
  */
 module.exports.isBottomCornerInsideTileBandLatitude = function isBottomCornerInsideTileBandLatitude (refTile, targetTile) {
-    return refTile.coords[0].lat <= targetTile.coords[3].lat &&
-        refTile.coords[3].lat >= targetTile.coords[3].lat;
+	return refTile.coords[0].lat <= targetTile.coords[3].lat &&
+		refTile.coords[3].lat >= targetTile.coords[3].lat;
 }

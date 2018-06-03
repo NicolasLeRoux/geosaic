@@ -4,10 +4,10 @@ const {
 	getRootNeighbors,
 	buildGeoTile,
 	getNeighbors,
-    isAdjacentLatitude,
-    isAdjacentLongitude,
-    isTopCornerInsideTileBandLatitude,
-    isBottomCornerInsideTileBandLatitude
+	isAdjacentLatitude,
+	isAdjacentLongitude,
+	isTopCornerInsideTileBandLatitude,
+	isBottomCornerInsideTileBandLatitude
 } = require('./index.js');
 const {
 	calculEarthGeodesic
@@ -222,262 +222,262 @@ describe(`In the index module,`, () => {
 		});
 	});
 
-    const GEO_TILE_01_01 = {
-        coords: [
-            {
-                lat: 0.05,
-                lon: 0.05
-            },
-            {
-                lat: 0.05,
-                lon: 0.06
-            },
-            {
-                lat: 0.06,
-                lon: 0.06
-            },
-            {
-                lat: 0.06,
-                lon: 0.05
-            }
-        ]
-    };
+	const GEO_TILE_01_01 = {
+		coords: [
+			{
+				lat: 0.05,
+				lon: 0.05
+			},
+			{
+				lat: 0.05,
+				lon: 0.06
+			},
+			{
+				lat: 0.06,
+				lon: 0.06
+			},
+			{
+				lat: 0.06,
+				lon: 0.05
+			}
+		]
+	};
 
-    const GEO_TILE_01_02 = {
-        coords: [
-            {
-                lat: 0.05,
-                lon: 0.06
-            },
-            {
-                lat: 0.05,
-                lon: 0.07
-            },
-            {
-                lat: 0.06,
-                lon: 0.07
-            },
-            {
-                lat: 0.06,
-                lon: 0.06
-            }
-        ]
-    };
+	const GEO_TILE_01_02 = {
+		coords: [
+			{
+				lat: 0.05,
+				lon: 0.06
+			},
+			{
+				lat: 0.05,
+				lon: 0.07
+			},
+			{
+				lat: 0.06,
+				lon: 0.07
+			},
+			{
+				lat: 0.06,
+				lon: 0.06
+			}
+		]
+	};
 
-    const GEO_TILE_01_03 = {
-        coords: [
-            {
-                lat: 0.05,
-                lon: 0.07
-            },
-            {
-                lat: 0.05,
-                lon: 0.08
-            },
-            {
-                lat: 0.06,
-                lon: 0.08
-            },
-            {
-                lat: 0.06,
-                lon: 0.07
-            }
-        ]
-    };
+	const GEO_TILE_01_03 = {
+		coords: [
+			{
+				lat: 0.05,
+				lon: 0.07
+			},
+			{
+				lat: 0.05,
+				lon: 0.08
+			},
+			{
+				lat: 0.06,
+				lon: 0.08
+			},
+			{
+				lat: 0.06,
+				lon: 0.07
+			}
+		]
+	};
 
-    const GEO_TILE_02_01 = {
-        coords: [
-            {
-                lat: 0.06,
-                lon: 0.05
-            },
-            {
-                lat: 0.06,
-                lon: 0.06
-            },
-            {
-                lat: 0.07,
-                lon: 0.06
-            },
-            {
-                lat: 0.07,
-                lon: 0.05
-            }
-        ]
-    };
+	const GEO_TILE_02_01 = {
+		coords: [
+			{
+				lat: 0.06,
+				lon: 0.05
+			},
+			{
+				lat: 0.06,
+				lon: 0.06
+			},
+			{
+				lat: 0.07,
+				lon: 0.06
+			},
+			{
+				lat: 0.07,
+				lon: 0.05
+			}
+		]
+	};
 
-    const GEO_TILE_02_02 = {
-        coords: [
-            {
-                lat: 0.06,
-                lon: 0.06
-            },
-            {
-                lat: 0.06,
-                lon: 0.07
-            },
-            {
-                lat: 0.07,
-                lon: 0.07
-            },
-            {
-                lat: 0.07,
-                lon: 0.06
-            }
-        ]
-    };
+	const GEO_TILE_02_02 = {
+		coords: [
+			{
+				lat: 0.06,
+				lon: 0.06
+			},
+			{
+				lat: 0.06,
+				lon: 0.07
+			},
+			{
+				lat: 0.07,
+				lon: 0.07
+			},
+			{
+				lat: 0.07,
+				lon: 0.06
+			}
+		]
+	};
 
-    const GEO_TILE_02_03 = {
-        coords: [
-            {
-                lat: 0.06,
-                lon: 0.07
-            },
-            {
-                lat: 0.06,
-                lon: 0.08
-            },
-            {
-                lat: 0.07,
-                lon: 0.08
-            },
-            {
-                lat: 0.07,
-                lon: 0.07
-            }
-        ]
-    };
+	const GEO_TILE_02_03 = {
+		coords: [
+			{
+				lat: 0.06,
+				lon: 0.07
+			},
+			{
+				lat: 0.06,
+				lon: 0.08
+			},
+			{
+				lat: 0.07,
+				lon: 0.08
+			},
+			{
+				lat: 0.07,
+				lon: 0.07
+			}
+		]
+	};
 
-    const GEO_TILE_03_01 = {
-        coords: [
-            {
-                lat: 0.07,
-                lon: 0.05
-            },
-            {
-                lat: 0.07,
-                lon: 0.06
-            },
-            {
-                lat: 0.08,
-                lon: 0.06
-            },
-            {
-                lat: 0.08,
-                lon: 0.05
-            }
-        ]
-    };
+	const GEO_TILE_03_01 = {
+		coords: [
+			{
+				lat: 0.07,
+				lon: 0.05
+			},
+			{
+				lat: 0.07,
+				lon: 0.06
+			},
+			{
+				lat: 0.08,
+				lon: 0.06
+			},
+			{
+				lat: 0.08,
+				lon: 0.05
+			}
+		]
+	};
 
-    const GEO_TILE_03_02 = {
-        coords: [
-            {
-                lat: 0.07,
-                lon: 0.06
-            },
-            {
-                lat: 0.07,
-                lon: 0.07
-            },
-            {
-                lat: 0.08,
-                lon: 0.07
-            },
-            {
-                lat: 0.08,
-                lon: 0.06
-            }
-        ]
-    };
+	const GEO_TILE_03_02 = {
+		coords: [
+			{
+				lat: 0.07,
+				lon: 0.06
+			},
+			{
+				lat: 0.07,
+				lon: 0.07
+			},
+			{
+				lat: 0.08,
+				lon: 0.07
+			},
+			{
+				lat: 0.08,
+				lon: 0.06
+			}
+		]
+	};
 
-    const GEO_TILE_03_03 = {
-        coords: [
-            {
-                lat: 0.07,
-                lon: 0.07
-            },
-            {
-                lat: 0.07,
-                lon: 0.08
-            },
-            {
-                lat: 0.08,
-                lon: 0.08
-            },
-            {
-                lat: 0.08,
-                lon: 0.07
-            }
-        ]
-    };
+	const GEO_TILE_03_03 = {
+		coords: [
+			{
+				lat: 0.07,
+				lon: 0.07
+			},
+			{
+				lat: 0.07,
+				lon: 0.08
+			},
+			{
+				lat: 0.08,
+				lon: 0.08
+			},
+			{
+				lat: 0.08,
+				lon: 0.07
+			}
+		]
+	};
 
 	describe(`The method 'getNeighbors',`, () => {
-        it(`Should return an empty array other geoTile.`, () => {
-            const array = getNeighbors([
-                GEO_TILE_01_01
-            ], GEO_TILE_01_01);
+		it(`Should return an empty array other geoTile.`, () => {
+			const array = getNeighbors([
+				GEO_TILE_01_01
+			], GEO_TILE_01_01);
 
-            expect(array.length).to.equal(0);
-        });
+			expect(array.length).to.equal(0);
+		});
 
-        it(`Should return one element if there is a tile is on the right.`, () => {
-            const array = getNeighbors([
-                GEO_TILE_01_01,
-                GEO_TILE_02_02
-            ], GEO_TILE_01_01);
+		it(`Should return one element if there is a tile is on the right.`, () => {
+			const array = getNeighbors([
+				GEO_TILE_01_01,
+				GEO_TILE_02_02
+			], GEO_TILE_01_01);
 
-            expect(array.length).to.equal(1);
-        });
-    });
+			expect(array.length).to.equal(1);
+		});
+	});
 	describe(`The method 'isAdjacentLatitude',`, () => {
-        it(`Should be true if the top side are on the same latitude.`, () => {
-            expect(isAdjacentLatitude(GEO_TILE_02_02, GEO_TILE_01_01)).to.be.ok();
-        });
+		it(`Should be true if the top side are on the same latitude.`, () => {
+			expect(isAdjacentLatitude(GEO_TILE_02_02, GEO_TILE_01_01)).to.be.ok();
+		});
 
-        it(`Should be true if the bottom side are on the same latitude.`, () => {
-            expect(isAdjacentLatitude(GEO_TILE_02_02, GEO_TILE_03_03)).to.be.ok();
-        });
+		it(`Should be true if the bottom side are on the same latitude.`, () => {
+			expect(isAdjacentLatitude(GEO_TILE_02_02, GEO_TILE_03_03)).to.be.ok();
+		});
 
-        it(`Should be false if the top or the bottom side are on different latitude.`, () => {
-            expect(isAdjacentLatitude(GEO_TILE_01_01, GEO_TILE_03_03)).not.to.be.ok();
-        });
-    });
+		it(`Should be false if the top or the bottom side are on different latitude.`, () => {
+			expect(isAdjacentLatitude(GEO_TILE_01_01, GEO_TILE_03_03)).not.to.be.ok();
+		});
+	});
 
 	describe(`The method 'isAdjacentLongitude',`, () => {
-        it(`Should be true if the top side are on the same latitude.`, () => {
-            expect(isAdjacentLongitude(GEO_TILE_02_02, GEO_TILE_01_01)).to.be.ok();
-        });
+		it(`Should be true if the top side are on the same latitude.`, () => {
+			expect(isAdjacentLongitude(GEO_TILE_02_02, GEO_TILE_01_01)).to.be.ok();
+		});
 
-        it(`Should be true if the bottom side are on the same latitude.`, () => {
-            expect(isAdjacentLongitude(GEO_TILE_02_02, GEO_TILE_03_03)).to.be.ok();
-        });
+		it(`Should be true if the bottom side are on the same latitude.`, () => {
+			expect(isAdjacentLongitude(GEO_TILE_02_02, GEO_TILE_03_03)).to.be.ok();
+		});
 
-        it(`Should be false if the top or the bottom side are on different latitude.`, () => {
-            expect(isAdjacentLongitude(GEO_TILE_01_01, GEO_TILE_03_03)).not.to.be.ok();
-        });
-    });
+		it(`Should be false if the top or the bottom side are on different latitude.`, () => {
+			expect(isAdjacentLongitude(GEO_TILE_01_01, GEO_TILE_03_03)).not.to.be.ok();
+		});
+	});
 
 	describe(`The method 'isTopCornerInsideTileBandLatitude',`, () => {
-        it(`Should be true for 2 GeoTiles on the same latitude.`, () => {
-            expect(isTopCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_01_02)).to.be.ok();
-        });
+		it(`Should be true for 2 GeoTiles on the same latitude.`, () => {
+			expect(isTopCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_01_02)).to.be.ok();
+		});
 
-        it(`Should be true for 2 GeoTiles on the same latitude (bis).`, () => {
-            expect(isTopCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_02_02)).to.be.ok();
-        });
+		it(`Should be true for 2 GeoTiles on the same latitude (bis).`, () => {
+			expect(isTopCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_02_02)).to.be.ok();
+		});
 
-        it(`Should be false for 2 GeoTiles on different latitude.`, () => {
-            expect(isTopCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_03_03)).not.to.be.ok();
-        });
-    });
+		it(`Should be false for 2 GeoTiles on different latitude.`, () => {
+			expect(isTopCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_03_03)).not.to.be.ok();
+		});
+	});
 
 	describe(`The method 'isBottomCornerInsideTileBandLatitude',`, () => {
-        it(`Should be true for 2 GeoTiles on the same latitude.`, () => {
-            expect(isBottomCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_01_02)).to.be.ok();
-        });
+		it(`Should be true for 2 GeoTiles on the same latitude.`, () => {
+			expect(isBottomCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_01_02)).to.be.ok();
+		});
 
-        it(`Should be false for 2 GeoTiles on different latitude.`, () => {
-            expect(isBottomCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_02_02)).not.to.be.ok();
-        });
-    });
+		it(`Should be false for 2 GeoTiles on different latitude.`, () => {
+			expect(isBottomCornerInsideTileBandLatitude(GEO_TILE_01_01, GEO_TILE_02_02)).not.to.be.ok();
+		});
+	});
 });
