@@ -229,6 +229,7 @@ describe(`In the index module,`, () => {
 	});
 
 	const GEO_TILE_01_01 = {
+		id: '01_01',
 		coords: [
 			{
 				lat: 0.05,
@@ -250,6 +251,7 @@ describe(`In the index module,`, () => {
 	};
 
 	const GEO_TILE_01_02 = {
+		id: '01_02',
 		coords: [
 			{
 				lat: 0.05,
@@ -271,6 +273,7 @@ describe(`In the index module,`, () => {
 	};
 
 	const GEO_TILE_01_03 = {
+		id: '01_03',
 		coords: [
 			{
 				lat: 0.05,
@@ -292,6 +295,7 @@ describe(`In the index module,`, () => {
 	};
 
 	const GEO_TILE_02_01 = {
+		id: '02_01',
 		coords: [
 			{
 				lat: 0.06,
@@ -313,6 +317,7 @@ describe(`In the index module,`, () => {
 	};
 
 	const GEO_TILE_02_02 = {
+		id: '02_02',
 		coords: [
 			{
 				lat: 0.06,
@@ -334,6 +339,7 @@ describe(`In the index module,`, () => {
 	};
 
 	const GEO_TILE_02_03 = {
+		id: '02_03',
 		coords: [
 			{
 				lat: 0.06,
@@ -355,6 +361,7 @@ describe(`In the index module,`, () => {
 	};
 
 	const GEO_TILE_03_01 = {
+		id: '03_01',
 		coords: [
 			{
 				lat: 0.07,
@@ -376,6 +383,7 @@ describe(`In the index module,`, () => {
 	};
 
 	const GEO_TILE_03_02 = {
+		id: '03_02',
 		coords: [
 			{
 				lat: 0.07,
@@ -397,6 +405,7 @@ describe(`In the index module,`, () => {
 	};
 
 	const GEO_TILE_03_03 = {
+		id: '03_03',
 		coords: [
 			{
 				lat: 0.07,
