@@ -10,7 +10,7 @@ const {
  * @param length The length of the square side
  * @return A grid of square
  */
-module.exports.buildGrid = function buildGrid (coordStart, coordEnd, step) {
+const buildGrid = function buildGrid (coordStart, coordEnd, step) {
 	const result = [];
 	let lat = coordStart.lat,
 		lon = coordStart.lon,
@@ -31,12 +31,12 @@ module.exports.buildGrid = function buildGrid (coordStart, coordEnd, step) {
 	}
 
 	return result;
-}
+};
 
 /**
  * TODO...
  */
-module.exports.getRootNeighbors = function getRootNeighbors (node, index, array, nbRow) {
+const getRootNeighbors = function getRootNeighbors (node, index, array, nbRow) {
 	const response = [];
 
 	// Top neighbor
@@ -61,7 +61,7 @@ module.exports.getRootNeighbors = function getRootNeighbors (node, index, array,
 	}
 
 	return response;
-}
+};
 
 /**
  * Util to build a GeoTile from a coordinate and a step.
@@ -82,7 +82,7 @@ module.exports.getRootNeighbors = function getRootNeighbors (node, index, array,
  * @param step The size of the side of the geographic square
  * @return A GeoTile for the given inputs
  */
-module.exports.buildGeoTile = function buildGeoTile (coord, step, id) {
+const buildGeoTile = function buildGeoTile (coord, step, id) {
 	const coords = [coord];
 	const nextLat = calculNextLatitude(coord, step)
 	const nextLon = calculNextLongitude(coord, step);
@@ -108,7 +108,7 @@ module.exports.buildGeoTile = function buildGeoTile (coord, step, id) {
 		coords,
 		step
 	};
-}
+};
 
 /**
  * Util to return an array of neighbors for a given GeoTile.
@@ -116,7 +116,7 @@ module.exports.buildGeoTile = function buildGeoTile (coord, step, id) {
  * @param current The GoeTile to analyze
  * @return The array of neighbors
  */
-module.exports.getNeighbors = function getNeighbors (geoTiles, current) {
+const getNeighbors = function getNeighbors (geoTiles, current) {
 	return geoTiles.filter(tile => {
 		let result = false;
 
@@ -131,7 +131,7 @@ module.exports.getNeighbors = function getNeighbors (geoTiles, current) {
 
 		return result;
 	});
-}
+};
 
 /**
  * Util to evaluate if the given tiles have a side on an adjacent latitude.
@@ -139,10 +139,10 @@ module.exports.getNeighbors = function getNeighbors (geoTiles, current) {
  * @param tileB The second tile
  * @return A state for the test
  */
-module.exports.isAdjacentLatitude = function isAdjacentLatitude (tileA, tileB) {
+const isAdjacentLatitude = function isAdjacentLatitude (tileA, tileB) {
 	return tileA.coords[0].lat === tileB.coords[3].lat ||
 		tileA.coords[3].lat === tileB.coords[0].lat;
-}
+};
 
 /**
  * Util to evaluate if the given tiles have a side on an adjacent longitude.
@@ -150,10 +150,10 @@ module.exports.isAdjacentLatitude = function isAdjacentLatitude (tileA, tileB) {
  * @param tileB The second tile
  * @return A state for the test
  */
-module.exports.isAdjacentLongitude = function isAdjacentLongitude (tileA, tileB) {
+const isAdjacentLongitude = function isAdjacentLongitude (tileA, tileB) {
 	return tileA.coords[0].lon === tileB.coords[1].lon ||
 		tileA.coords[1].lon === tileB.coords[0].lon;
-}
+};
 
 /**
  * Util to evaluate if the target tile has a top corner inside the latitude band
@@ -162,10 +162,10 @@ module.exports.isAdjacentLongitude = function isAdjacentLongitude (tileA, tileB)
  * @param targetTile The second tile, aka tile to evaluate
  * @return A state for the test
  */
-module.exports.isTopCornerInsideTileBandLatitude = function isTopCornerInsideTileBandLatitude (refTile, targetTile) {
+const isTopCornerInsideTileBandLatitude = function isTopCornerInsideTileBandLatitude (refTile, targetTile) {
 	return refTile.coords[0].lat <= targetTile.coords[0].lat &&
 		refTile.coords[3].lat > targetTile.coords[0].lat;
-}
+};
 
 /**
  * Util to evaluate if the target tile has a bottom corner inside the latitude band
@@ -174,10 +174,10 @@ module.exports.isTopCornerInsideTileBandLatitude = function isTopCornerInsideTil
  * @param targetTile The second tile, aka tile to evaluate
  * @return A state for the test
  */
-module.exports.isBottomCornerInsideTileBandLatitude = function isBottomCornerInsideTileBandLatitude (refTile, targetTile) {
+const isBottomCornerInsideTileBandLatitude = function isBottomCornerInsideTileBandLatitude (refTile, targetTile) {
 	return refTile.coords[0].lat < targetTile.coords[3].lat &&
 		refTile.coords[3].lat >= targetTile.coords[3].lat;
-}
+};
 
 /**
  * Util to evaluate if the target tile has a left corner inside the longitude band
@@ -186,10 +186,10 @@ module.exports.isBottomCornerInsideTileBandLatitude = function isBottomCornerIns
  * @param targetTile The second tile, aka tile to evaluate
  * @return A state for the test
  */
-module.exports.isLeftCornerInsideTileBandLongitude = function isLeftCornerInsideTileBandLongitude (refTile, targetTile) {
+const isLeftCornerInsideTileBandLongitude = function isLeftCornerInsideTileBandLongitude (refTile, targetTile) {
 	return refTile.coords[0].lon <= targetTile.coords[0].lon &&
 		refTile.coords[1].lon > targetTile.coords[0].lon;
-}
+};
 
 /**
  * Util to evaluate if the target tile has a right corner inside the longitude band
@@ -198,10 +198,10 @@ module.exports.isLeftCornerInsideTileBandLongitude = function isLeftCornerInside
  * @param targetTile The second tile, aka tile to evaluate
  * @return A state for the test
  */
-module.exports.isRightCornerInsideTileBandLongitude = function isRightCornerInsideTileBandLongitude (refTile, targetTile) {
+const isRightCornerInsideTileBandLongitude = function isRightCornerInsideTileBandLongitude (refTile, targetTile) {
 	return refTile.coords[0].lon < targetTile.coords[1].lon &&
 		refTile.coords[1].lon >= targetTile.coords[1].lon;
-}
+};
 
 /**
  * Util to evaluate if the target tile has the latitude band of the reference tile
@@ -210,10 +210,10 @@ module.exports.isRightCornerInsideTileBandLongitude = function isRightCornerInsi
  * @param targetTile The second tile, aka tile to evaluate
  * @return A state for the test
  */
-module.exports.isTileBandLatitudeInsideBiggerTile = function isTileBandLatitudeInsideBiggerTile (refTile, targetTile) {
+const isTileBandLatitudeInsideBiggerTile = function isTileBandLatitudeInsideBiggerTile (refTile, targetTile) {
 	return refTile.coords[0].lat <= targetTile.coords[0].lat &&
 		refTile.coords[3].lat >= targetTile.coords[3].lat;
-}
+};
 
 /**
  * Util to evaluate if the target tile has the longitude band of the reference tile
@@ -222,10 +222,10 @@ module.exports.isTileBandLatitudeInsideBiggerTile = function isTileBandLatitudeI
  * @param targetTile The second tile, aka tile to evaluate
  * @return A state for the test
  */
-module.exports.isTileBandLongitudeInsideBiggerTile = function isTileBandLongitudeInsideBiggerTile (refTile, targetTile) {
+const isTileBandLongitudeInsideBiggerTile = function isTileBandLongitudeInsideBiggerTile (refTile, targetTile) {
 	return refTile.coords[0].lon <= targetTile.coords[0].lon &&
 		refTile.coords[1].lon >= targetTile.coords[1].lon;
-}
+};
 
 /**
  * Util to evaluate if the target tile is inside the latitude band of the reference
@@ -234,10 +234,10 @@ module.exports.isTileBandLongitudeInsideBiggerTile = function isTileBandLongitud
  * @param targetTile The second tile, aka tile to evaluate
  * @return A state for the test
  */
-module.exports.isSmallerTileInsideTileBandLatitude = function isSmallerTileInsideTileBandLatitude (refTile, targetTile) {
+const isSmallerTileInsideTileBandLatitude = function isSmallerTileInsideTileBandLatitude (refTile, targetTile) {
 	return refTile.coords[0].lat >= targetTile.coords[0].lat &&
 		refTile.coords[3].lat <= targetTile.coords[3].lat;
-}
+};
 
 /**
  * Util to evaluate if the target tile is inside the longitude band of the reference
@@ -246,7 +246,24 @@ module.exports.isSmallerTileInsideTileBandLatitude = function isSmallerTileInsid
  * @param targetTile The second tile, aka tile to evaluate
  * @return A state for the test
  */
-module.exports.isSmallerTileInsideTileBandLongitude = function isSmallerTileInsideTileBandLongitude (refTile, targetTile) {
+const isSmallerTileInsideTileBandLongitude = function isSmallerTileInsideTileBandLongitude (refTile, targetTile) {
 	return refTile.coords[0].lon >= targetTile.coords[0].lon &&
 		refTile.coords[1].lon <= targetTile.coords[1].lon;
-}
+};
+
+module.exports = {
+	buildGrid,
+	getRootNeighbors,
+	buildGeoTile,
+	getNeighbors,
+	isAdjacentLatitude,
+	isAdjacentLongitude,
+	isTopCornerInsideTileBandLatitude,
+	isBottomCornerInsideTileBandLatitude,
+	isLeftCornerInsideTileBandLongitude,
+	isRightCornerInsideTileBandLongitude,
+	isTileBandLatitudeInsideBiggerTile,
+	isTileBandLongitudeInsideBiggerTile,
+	isSmallerTileInsideTileBandLatitude,
+	isSmallerTileInsideTileBandLongitude
+};
