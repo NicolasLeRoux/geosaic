@@ -1,7 +1,6 @@
 const expect = require('expect.js');
 const {
 	buildGrid,
-	getRootNeighbors,
 	buildGeoTile,
 	getNeighbors,
 	isAdjacentLatitude,
@@ -66,88 +65,6 @@ describe(`In the index module,`, () => {
 			const grid = buildGrid(coordEnd01, coordStart01, 50);
 
 			expect(grid.length).to.equal(0);
-		});
-	});
-
-	describe(`The method 'getRootNeighbors',`, () => {
-		const PARENT_NODE_01 = {
-			id: 1,
-			coord: {
-				lat: 0,
-				lon: 0
-			},
-			step: 100,
-			parent: null,
-			childs: [
-			]
-		};
-
-		const PARENT_NODE_02 = {
-			id: 2,
-			coord: {
-				lat: 0,
-				lon: 0
-			},
-			step: 100,
-			parent: null,
-			childs: [
-			]
-		};
-
-		const PARENT_NODE_03 = {
-			id: 3,
-			coord: {
-				lat: 0,
-				lon: 0
-			},
-			step: 100,
-			parent: null,
-			childs: [
-			]
-		};
-
-		const PARENT_NODE_04 = {
-			id: 4,
-			coord: {
-				lat: 0,
-				lon: 0
-			},
-			step: 100,
-			parent: null,
-			childs: [
-			]
-		};
-
-		it(`Should return 0 if the node doesn't have any root neighbors.`, () => {
-			const neighbors = getRootNeighbors(PARENT_NODE_01, 0, [], 1);
-
-			expect(neighbors.length).to.equal(0);
-		});
-
-		it(`Should return 2 root neighbors for the given node.`, () => {
-			const neighbors = getRootNeighbors(PARENT_NODE_01, 0, [
-				PARENT_NODE_01,
-				PARENT_NODE_02,
-				PARENT_NODE_03,
-				PARENT_NODE_04
-			], 2);
-
-			expect(neighbors.length).to.equal(2);
-			expect(neighbors[0].id).to.equal(3);
-			expect(neighbors[1].id).to.equal(2);
-		});
-
-		it(`Should return 2 root neighbors for the given node (bis).`, () => {
-			const neighbors = getRootNeighbors(PARENT_NODE_03, 2, [
-				PARENT_NODE_01,
-				PARENT_NODE_02,
-				PARENT_NODE_03,
-				PARENT_NODE_04
-			], 2);
-
-			expect(neighbors.length).to.equal(2);
-			expect(neighbors[0].id).to.equal(4);
-			expect(neighbors[1].id).to.equal(1);
 		});
 	});
 
@@ -426,6 +343,50 @@ describe(`In the index module,`, () => {
 		]
 	};
 
+	const GEO_TILE_2x_01_01 = {
+		id: '2x_01_01',
+		coords: [
+			{
+				lat: 0.05,
+				lon: 0.05
+			},
+			{
+				lat: 0.05,
+				lon: 0.07
+			},
+			{
+				lat: 0.07,
+				lon: 0.07
+			},
+			{
+				lat: 0.07,
+				lon: 0.05
+			}
+		]
+	};
+
+	const GEO_TILE_3x_01_03 = {
+		id: '3x_01_03',
+		coords: [
+			{
+				lat: 0.05,
+				lon: 0.07
+			},
+			{
+				lat: 0.05,
+				lon: 0.10
+			},
+			{
+				lat: 0.08,
+				lon: 0.10
+			},
+			{
+				lat: 0.08,
+				lon: 0.07
+			}
+		]
+	};
+
 	describe(`The method 'getNeighbors',`, () => {
 		it(`Should return an empty array other geoTile.`, () => {
 			const array = getNeighbors([
@@ -437,13 +398,95 @@ describe(`In the index module,`, () => {
 
 		it(`Should return one element if there is a tile is on the right.`, () => {
 			const array = getNeighbors([
-				GEO_TILE_01_01,
-				GEO_TILE_02_02
-			], GEO_TILE_01_01);
+				GEO_TILE_02_03
+			], GEO_TILE_02_02);
 
 			expect(array.length).to.equal(1);
+			expect(array[0].id).to.equal('02_03');
+		});
+
+		it(`Should return one element if there is a tile is on the bottom.`, () => {
+			const array = getNeighbors([
+				GEO_TILE_03_02
+			], GEO_TILE_02_02);
+
+			expect(array.length).to.equal(1);
+			expect(array[0].id).to.equal('03_02');
+		});
+
+		it(`Should return one element if there is a tile is on the left.`, () => {
+			const array = getNeighbors([
+				GEO_TILE_02_01
+			], GEO_TILE_02_02);
+
+			expect(array.length).to.equal(1);
+			expect(array[0].id).to.equal('02_01');
+		});
+
+		it(`Should return one element if there is a tile is on the top.`, () => {
+			const array = getNeighbors([
+				GEO_TILE_01_02
+			], GEO_TILE_02_02);
+
+			expect(array.length).to.equal(1);
+			expect(array[0].id).to.equal('01_02');
+		});
+
+		it(`Should return only 4 éléments for a full grid.`, () => {
+			const array = getNeighbors([
+				GEO_TILE_01_01,
+				GEO_TILE_01_02,
+				GEO_TILE_01_03,
+				GEO_TILE_02_01,
+				GEO_TILE_02_02,
+				GEO_TILE_02_03,
+				GEO_TILE_03_01,
+				GEO_TILE_03_02,
+				GEO_TILE_03_03
+			], GEO_TILE_02_02);
+
+			expect(array.length).to.equal(4);
+			expect(array[0].id).to.equal('01_02');
+			expect(array[1].id).to.equal('02_01');
+			expect(array[2].id).to.equal('02_03');
+			expect(array[3].id).to.equal('03_02');
+		});
+
+		it(`Should return 4 éléments for a big tile.`, () => {
+			const array = getNeighbors([
+				GEO_TILE_2x_01_01,
+				GEO_TILE_01_03,
+				GEO_TILE_02_03,
+				GEO_TILE_03_01,
+				GEO_TILE_03_02,
+				GEO_TILE_03_03
+			], GEO_TILE_2x_01_01);
+
+			expect(array.length).to.equal(4);
+			expect(array[0].id).to.equal('01_03');
+			expect(array[1].id).to.equal('02_03');
+			expect(array[2].id).to.equal('03_01');
+			expect(array[3].id).to.equal('03_02');
+		});
+
+		it(`Should return 3 éléments for a bigger tile.`, () => {
+			const array = getNeighbors([
+				GEO_TILE_3x_01_03,
+				GEO_TILE_01_01,
+				GEO_TILE_01_02,
+				GEO_TILE_02_01,
+				GEO_TILE_02_02,
+				GEO_TILE_03_01,
+				GEO_TILE_03_02
+			], GEO_TILE_3x_01_03);
+
+			expect(array.length).to.equal(3);
+			expect(array[0].id).to.equal('01_02');
+			expect(array[1].id).to.equal('02_02');
+			expect(array[2].id).to.equal('03_02');
 		});
 	});
+
 	describe(`The method 'isAdjacentLatitude',`, () => {
 		it(`Should be true if the top side are on the same latitude.`, () => {
 			expect(isAdjacentLatitude(GEO_TILE_02_02, GEO_TILE_01_01)).to.be.ok();

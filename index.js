@@ -34,36 +34,6 @@ const buildGrid = function buildGrid (coordStart, coordEnd, step) {
 };
 
 /**
- * TODO...
- */
-const getRootNeighbors = function getRootNeighbors (node, index, array, nbRow) {
-	const response = [];
-
-	// Top neighbor
-	if (!!array[index - 1] && index % nbRow !== 0) {
-		response.push(array[index - 1]);
-	}
-
-	// Right neighbor
-	if (!!array[index + nbRow]) {
-		response.push(array[index + nbRow]);
-	}
-
-
-	// Bottom neighbor
-	if (!!array[index + 1] && (index + 1) % nbRow !== 0) {
-		response.push(array[index + 1]);
-	}
-
-	// Left neighbor
-	if (!!array[index - nbRow]) {
-		response.push(array[index - nbRow]);
-	}
-
-	return response;
-};
-
-/**
  * Util to build a GeoTile from a coordinate and a step.
  *
  * Example of GeoTile:
@@ -118,18 +88,32 @@ const buildGeoTile = function buildGeoTile (coord, step, id) {
  */
 const getNeighbors = function getNeighbors (geoTiles, current) {
 	return geoTiles.filter(tile => {
-		let result = false;
-
 		// Remove current element
 		if (current.id === tile.id) {
 			return false;
 		}
 
 		// Tiles on the same longitude
+		if (isAdjacentLatitude(current, tile)) {
+			if (isLeftCornerInsideTileBandLongitude(current, tile) ||
+				isRightCornerInsideTileBandLongitude(current, tile) ||
+				isTileBandLongitudeInsideBiggerTile(current, tile) ||
+				isSmallerTileInsideTileBandLongitude(current, tile)) {
+					return true;
+				}
+		}
 
 		// Tiles on the same latitude
+		if (isAdjacentLongitude(current, tile)) {
+			if (isTopCornerInsideTileBandLatitude(current, tile) ||
+				isBottomCornerInsideTileBandLatitude(current, tile) ||
+				isTileBandLatitudeInsideBiggerTile(current, tile) ||
+				isSmallerTileInsideTileBandLatitude(current, tile)) {
+					return true;
+				}
+		}
 
-		return result;
+		return false;
 	});
 };
 
@@ -253,7 +237,6 @@ const isSmallerTileInsideTileBandLongitude = function isSmallerTileInsideTileBan
 
 module.exports = {
 	buildGrid,
-	getRootNeighbors,
 	buildGeoTile,
 	getNeighbors,
 	isAdjacentLatitude,
