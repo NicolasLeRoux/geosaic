@@ -3,6 +3,18 @@ const {
 	calculNextLongitude,
 	getBiggestDivisor
 } = require('./lib/math.js');
+const {
+	from,
+	of
+} = require('rxjs');
+const {
+	withLatestFrom,
+	mergeMap
+} = require('rxjs/operators');
+const {
+	mapCoordsToGeoTiles,
+	mergeMapGeoTileWithService
+} = require('./reactive.js');
 const FakeGeoService = require('./lib/fake-geo.service.js');
 const {
 	buildGeoTile
@@ -208,22 +220,43 @@ const splitGeoTile = function splitGeoTile (tile) {
 };
 
 /**
- * Util to get the center of a GeoTile.
- * @param tile The GeoTile to evaluate
- * @return The coord of the center of the GeoTile
+ * Runner !
  */
-const getCenterCoord = function getCenterCoord (tile) {
-	const step = Math.round(tile.step / 2);
-
-	return {
-		lat: calculNextLatitude(tile.coords[0], step),
-		lon: calculNextLongitude(tile.coords[0], step),
+const run = function run () {
+	const coordStart = {
+		lat: 50.010000,
+		lon: 2.000000
 	};
-}
+	const coordEnd = {
+		lat: 50.000000,
+		lon: 2.020000
+	};
+	const step = 100;
+
+	// 3. Map GeoTile to service
+	const fakeSrv = new FakeGeoService({
+		radius: 200,
+		points: [
+			{
+				lat: 50.000000,
+				lon: 2.020000
+			}
+		]
+	});
+
+	of(buildGrid(coordStart, coordEnd, step))
+		.pipe(
+			withLatestFrom(of(step), mapCoordsToGeoTiles),
+			mergeMap(array => from(array)),
+			mergeMap(array => mergeMapGeoTileWithService(array, fakeSrv))
+		)
+		.subscribe(tile => {
+			// TODO
+		});
+};
 
 module.exports = {
 	buildGrid,
-	buildGeoTile,
 	getNeighbors,
 	isAdjacentLatitude,
 	isAdjacentLongitude,
