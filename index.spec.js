@@ -1,7 +1,6 @@
 const expect = require('expect.js');
 const {
 	buildGrid,
-	buildGeoTile,
 	getNeighbors,
 	isAdjacentLatitude,
 	isAdjacentLongitude,
@@ -69,83 +68,6 @@ describe(`In the index module,`, () => {
 			const grid = buildGrid(coordEnd01, coordStart01, 50);
 
 			expect(grid.length).to.equal(0);
-		});
-	});
-
-	describe(`The method 'buildGeoTile',`, () => {
-		it(`Should have the first item in coords array same as the given coord.`, () => {
-			const tile = buildGeoTile({
-				lat: 40,
-				lon: 2
-			}, 100);
-
-			expect(tile.coords[0].lat).to.equal(40);
-			expect(tile.coords[0].lon).to.equal(2);
-		});
-
-		it(`Should have the step value same as the given step.`, () => {
-			const tile = buildGeoTile({
-				lat: 40,
-				lon: 2
-			}, 113);
-
-			expect(tile.step).to.equal(113);
-		});
-
-		const suite = [
-			{
-				lat: 0,
-				lon: 0,
-				step: 100,
-				idx: 1,
-				expectedLat: 0,
-				expectedLon: 0.000898,
-			},
-			{
-				lat: 0,
-				lon: 0,
-				step: 100,
-				idx: 2,
-				expectedLat: -0.000898,
-				expectedLon: 0.000898
-			},
-			{
-				lat: 0,
-				lon: 0,
-				step: 100,
-				idx: 3,
-				expectedLat: -0.000898,
-				expectedLon: 0,
-			},
-			{
-				lat: 50,
-				lon: 2,
-				step: 130,
-				idx: 2,
-				expectedLat: 49.998832,
-				expectedLon: 2.001817
-			}
-		];
-
-		suite.forEach(test => {
-			it(`Should have lat=${test.expectedLat} & lon=${test.expectedLon} at the index ${test.idx}.`, () => {
-				const tile = buildGeoTile({
-					lat: test.lat,
-					lon: test.lon
-				}, test.step);
-
-				expect(tile.coords[test.idx].lat).to.equal(test.expectedLat);
-				expect(tile.coords[test.idx].lon).to.equal(test.expectedLon);
-			});
-		});
-
-		it(`Should have the given ID in params.`, () => {
-			const tile = buildGeoTile({
-				lat: 40,
-				lon: 2
-			}, 100, 33);
-
-			expect(tile.id).to.equal(33);
 		});
 	});
 

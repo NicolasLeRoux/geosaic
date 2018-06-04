@@ -2,9 +2,11 @@ const path = require('path');
 const express = require('express');
 const http = require('http');
 const {
-	buildGrid,
-	buildGeoTile
+	buildGrid
 } = require('./index.js');
+const {
+	buildGeoTile
+} = require('./lib/geo-tile.utils.js');
 
 let app = express(),
 	server = http.createServer(app);

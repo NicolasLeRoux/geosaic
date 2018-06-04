@@ -1,6 +1,10 @@
 const {
-	buildGeoTile
+	getCenterCoord
 } = require('./index.js');
+const {
+	buildGeoTile
+} = require('./lib/geo-tile.utils.js');
+
 
 /**
  * Util to map an array of coords to an array of GeoTile.
