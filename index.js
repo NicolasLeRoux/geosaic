@@ -3,6 +3,7 @@ const {
 	calculNextLongitude,
 	getBiggestDivisor
 } = require('./lib/math.js');
+const FakeGeoService = require('./lib/fake-geo.service.js');
 const {
 	buildGeoTile
 } = require('./lib/geo-tile.utils.js');
