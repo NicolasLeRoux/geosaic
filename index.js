@@ -236,5 +236,5 @@ module.exports = {
 	isSmallerTileInsideTileBandLatitude,
 	isSmallerTileInsideTileBandLongitude,
 	splitGeoTile,
-	getCenterCoord
+	run
 };

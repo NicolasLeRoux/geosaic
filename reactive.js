@@ -1,8 +1,6 @@
 const {
+	buildGeoTile,
 	getCenterCoord
-} = require('./index.js');
-const {
-	buildGeoTile
 } = require('./lib/geo-tile.utils.js');
 
 
