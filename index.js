@@ -5,11 +5,14 @@ const {
 } = require('./lib/math.js');
 const {
 	from,
-	of
+	of,
+    interval
 } = require('rxjs');
 const {
 	withLatestFrom,
-	mergeMap
+	mergeMap,
+    take,
+    map
 } = require('rxjs/operators');
 const {
 	mapCoordsToGeoTiles,
@@ -244,8 +247,12 @@ const run = function run () {
 		]
 	});
 
-	of(buildGrid(coordStart, coordEnd, step))
+    const array = buildGrid(coordStart, coordEnd, step);
+
+	interval(200)
 		.pipe(
+            map(idx => array[idx]),
+            take(array.length),
 			withLatestFrom(of(step), mapCoordsToGeoTiles),
 			mergeMap(array => from(array)),
 			mergeMap(array => mergeMapGeoTileWithService(array, fakeSrv))
