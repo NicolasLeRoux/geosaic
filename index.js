@@ -17,7 +17,7 @@ const {
 const {
 	mapCoordsToGeoTiles,
 	mergeMapGeoTileWithService
-} = require('./reactive.js');
+} = require('./lib/reactive.js');
 const FakeGeoService = require('./lib/fake-geo.service.js');
 const {
 	buildGeoTile
