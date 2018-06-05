@@ -12,11 +12,13 @@ const {
 	withLatestFrom,
 	mergeMap,
     take,
-    map
+    map,
+    tap
 } = require('rxjs/operators');
 const {
 	mapCoordsToGeoTiles,
-	mergeMapGeoTileWithService
+	mergeMapGeoTileWithService,
+    mapArrayToValuefromIndex
 } = require('./lib/reactive.js');
 const FakeGeoService = require('./lib/fake-geo.service.js');
 const {
@@ -251,7 +253,7 @@ const run = function run () {
 
 	interval(200)
 		.pipe(
-            map(idx => array[idx]),
+            mapArrayToValuefromIndex(array),
             take(array.length),
 			withLatestFrom(of(step), mapCoordsToGeoTiles),
 			mergeMap(array => from(array)),
