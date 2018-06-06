@@ -2,7 +2,8 @@ const path = require('path');
 const express = require('express');
 const http = require('http');
 const {
-	buildGrid
+	buildGrid,
+	run
 } = require('./index.js');
 const {
 	buildGeoTile
@@ -24,22 +25,25 @@ app.get('/node_modules/**/*', (req, res) => {
 });
 
 app.get('/api/grid/:latA/:lonA/:latB/:lonB/:step', (req, res) => {
-	const coordA = {
+	const start = {
 		lat: +req.params.latA,
 		lon: +req.params.lonA
 	};
-	const coordB = {
+	const end = {
 		lat: +req.params.latB,
 		lon: +req.params.lonB
 	};
 	const step = +req.params.step;
-	const grid = buildGrid(coordA, coordB, step)
-		.map((coord, idx) => {
-			return buildGeoTile(coord, step, idx);
-		});
 
-	res.setHeader('Content-Type', 'application/json');
-	res.send(JSON.stringify(grid));
+	return run(start, end, step)
+		.toPromise()
+		.then(tiles => {
+			res.setHeader('Content-Type', 'application/json');
+			res.send(JSON.stringify(tiles));
+		}, () => {
+			res.status(500)
+				.send('Something broke!');
+		});
 });
 
 /**

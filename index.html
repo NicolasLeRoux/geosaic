@@ -16,27 +16,33 @@
 
 		<script>
 			let geoMap = L.map('map')
-				.setView([51.505, -0.09], 13);
+				.setView([51.506, -0.07], 15);
 
-			let marker = L.marker([51.5, -0.09])
+			let marker = L.marker([51.505, -0.069])
 				.addTo(geoMap);
 
 			let polygon = L.polygon([
-				[51.509, -0.08],
-				[51.509, -0.06],
-				[51.503, -0.06],
-				[51.503, -0.08]
+				[51.5075, -0.073],
+				[51.5075, -0.065],
+				[51.5032, -0.065],
+				[51.5032, -0.073]
 			], {
 				color: 'red',
 				fillColor: '#f03',
 				fillOpacity: 0.1,
 			}).addTo(geoMap);
 
-			fetch('/api/grid/51.509/-0.08/51.503/-0.06/200').then(resp => {
+			fetch('/api/grid/51.5075/-0.073/51.5032/-0.065/100').then(resp => {
 				return resp.json();
 			}).then(data => {
 				data.forEach(geoTile => {
-					let polygon = L.polygon(geoTile.coords)
+					const opts = {};
+
+					if (geoTile.isSomethingHere) {
+						opts.color = 'yellow';
+					}
+
+					const polygon = L.polygon(geoTile.coords, opts)
 						.addTo(geoMap);
 
 					polygon.bindPopup(`ID: ${geoTile.id}`);

@@ -13,7 +13,8 @@ const {
 	mergeMap,
 	take,
 	map,
-	tap
+	tap,
+	reduce
 } = require('rxjs/operators');
 const {
 	mapCoordsToGeoTiles,
@@ -227,24 +228,14 @@ const splitGeoTile = function splitGeoTile (tile) {
 /**
  * Runner !
  */
-const run = function run () {
-	const coordStart = {
-		lat: 50.010000,
-		lon: 2.000000
-	};
-	const coordEnd = {
-		lat: 50.000000,
-		lon: 2.020000
-	};
-	const step = 100;
-
+const run = function run (coordStart, coordEnd, step) {
 	// 3. Map GeoTile to service
 	const fakeSrv = new FakeGeoService({
 		radius: 200,
 		points: [
 			{
-				lat: 50.000000,
-				lon: 2.020000
+				lat: 51.505,
+				lon: -0.069
 			}
 		]
 	});
@@ -254,13 +245,16 @@ const run = function run () {
 	return interval(0)
 		.pipe(
 			mapArrayToValuefromIndex(array),
+			take(array.length),
 			withLatestFrom(of(step), (coord, step) => {
 				return buildGeoTile(coord, step);
 			}),
 			mergeMap(geoTile => {
 				return mergeMapGeoTileWithService(geoTile, fakeSrv);
 			}),
-			tap(tile => console.log(`Value: ${tile.isSomethingHere}`))
+			reduce((acc, geoTile) => {
+				return [...acc, geoTile];
+			}, [])
 		);
 };
 
