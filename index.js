@@ -6,19 +6,19 @@ const {
 const {
 	from,
 	of,
-    interval
+	interval
 } = require('rxjs');
 const {
 	withLatestFrom,
 	mergeMap,
-    take,
-    map,
-    tap
+	take,
+	map,
+	tap
 } = require('rxjs/operators');
 const {
 	mapCoordsToGeoTiles,
 	mergeMapGeoTileWithService,
-    mapArrayToValuefromIndex
+	mapArrayToValuefromIndex
 } = require('./lib/reactive.js');
 const FakeGeoService = require('./lib/fake-geo.service.js');
 const {
@@ -249,12 +249,12 @@ const run = function run () {
 		]
 	});
 
-    const array = buildGrid(coordStart, coordEnd, step);
+	const array = buildGrid(coordStart, coordEnd, step);
 
 	interval(200)
 		.pipe(
-            mapArrayToValuefromIndex(array),
-            take(array.length),
+			mapArrayToValuefromIndex(array),
+			take(array.length),
 			withLatestFrom(of(step), mapCoordsToGeoTiles),
 			mergeMap(array => from(array)),
 			mergeMap(array => mergeMapGeoTileWithService(array, fakeSrv))
