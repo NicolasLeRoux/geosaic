@@ -603,8 +603,10 @@ describe(`In the index module,`, () => {
 	});
 
 	describe(`The method 'run',`, () => {
-		it(`Should ...`, () => {
-			run();
+		it(`Should ...`, (done) => {
+			run().subscribe(tiles => {
+				done();
+			});
 		})
 	});
 });

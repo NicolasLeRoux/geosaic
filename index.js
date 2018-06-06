@@ -251,17 +251,17 @@ const run = function run () {
 
 	const array = buildGrid(coordStart, coordEnd, step);
 
-	interval(200)
+	return interval(0)
 		.pipe(
 			mapArrayToValuefromIndex(array),
-			take(array.length),
-			withLatestFrom(of(step), mapCoordsToGeoTiles),
-			mergeMap(array => from(array)),
-			mergeMap(array => mergeMapGeoTileWithService(array, fakeSrv))
-		)
-		.subscribe(tile => {
-			// TODO
-		});
+			withLatestFrom(of(step), (coord, step) => {
+				return buildGeoTile(coord, step);
+			}),
+			mergeMap(geoTile => {
+				return mergeMapGeoTileWithService(geoTile, fakeSrv);
+			}),
+			tap(tile => console.log(`Value: ${tile.isSomethingHere}`))
+		);
 };
 
 module.exports = {
