@@ -257,13 +257,39 @@ const run = function run (coordStart, coordEnd, step) {
 				return [...acc, geoTile];
 			}, []),
             map(geoTiles => {
-                return geoTiles.filter((tile, idx, array) => {
+                const borders = geoTiles.filter((tile, idx, array) => {
                     const neighbors = getNeighbors(array, tile);
                     const state = neighbors.find(item => item.isSomethingHere !== tile.isSomethingHere);
 
                     return !!state;
                 });
-            })
+
+                return [borders, geoTiles];
+            }),
+            map(([borders, geoTiles]) => {
+                const notBorders = geoTiles.filter(tile => {
+                    return !borders.includes(tile);
+                });
+
+                return [borders, notBorders];
+            }),
+            map(([borders, notBorders]) => {
+                const splitted = borders.map(tile => {
+                    return splitGeoTile(tile);
+                })
+                .reduce((acc, smallerTiles) => {
+                    return [...acc, ...smallerTiles];
+                }, []);
+
+                return [...notBorders, ...splitted];
+            }),
+            mergeMap(array => from(array)),
+			mergeMap(geoTile => {
+				return mergeMapGeoTileWithService(geoTile, fakeSrv);
+			}),
+			reduce((acc, geoTile) => {
+				return [...acc, geoTile];
+			}, [])
 		);
 };
 
