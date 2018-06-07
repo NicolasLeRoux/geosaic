@@ -1,7 +1,8 @@
 const {
 	calculNextLatitude,
 	calculNextLongitude,
-	getBiggestDivisor
+	getBiggestDivisor,
+    buildGrid
 } = require('./lib/math.js');
 const {
 	from,
@@ -27,36 +28,6 @@ const FakeGeoService = require('./lib/fake-geo.service.js');
 const {
 	buildGeoTile
 } = require('./lib/geo-tile.utils.js');
-
-/**
- * Method to build a grid from 2 geolocations.
- * @param coordStart The up left corner of the rectangle
- * @param coordEnd The bottom right corner of the rectangle
- * @param length The length of the square side
- * @return A grid of square
- */
-const buildGrid = function buildGrid (coordStart, coordEnd, step) {
-	const result = [];
-	let lat = coordStart.lat,
-		lon = coordStart.lon,
-		coord;
-
-	while (lon < coordEnd.lon) {
-		while (lat > coordEnd.lat) {
-			coord = {
-				lat,
-				lon
-			};
-			result.push(coord);
-
-			lat = calculNextLatitude(coord, step);
-		}
-		lon = calculNextLongitude(coord, step);
-		lat = coordStart.lat;
-	}
-
-	return result;
-};
 
 /**
  * Util to return an array of neighbors for a given GeoTile.
@@ -291,7 +262,6 @@ const run = function run (coordStart, coordEnd, step) {
 };
 
 module.exports = {
-	buildGrid,
 	getNeighbors,
 	isAdjacentLatitude,
 	isAdjacentLongitude,

@@ -2,7 +2,6 @@ const path = require('path');
 const express = require('express');
 const http = require('http');
 const {
-	buildGrid,
 	run
 } = require('./index.js');
 const {
