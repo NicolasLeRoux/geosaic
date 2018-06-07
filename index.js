@@ -69,12 +69,27 @@ const run = function run (coordStart, coordEnd, step) {
 				return mergeMapGeoTileWithService(geoTile, fakeSrv);
 			}),
             accumulateGeoTile(),
+            // First split
             splitGeoTileAtBorder(),
             mergeMap(array => from(array)),
 			mergeMap(geoTile => {
 				return mergeMapGeoTileWithService(geoTile, fakeSrv);
 			}),
-            accumulateGeoTile()
+            accumulateGeoTile(),
+            // Second split
+            splitGeoTileAtBorder(),
+            mergeMap(array => from(array)),
+			mergeMap(geoTile => {
+				return mergeMapGeoTileWithService(geoTile, fakeSrv);
+			}),
+            accumulateGeoTile(),
+            // Third split
+            splitGeoTileAtBorder(),
+            mergeMap(array => from(array)),
+			mergeMap(geoTile => {
+				return mergeMapGeoTileWithService(geoTile, fakeSrv);
+			}),
+            accumulateGeoTile(),
 		);
 };
 
