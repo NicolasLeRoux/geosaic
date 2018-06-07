@@ -1,7 +1,6 @@
 const {
 	calculNextLatitude,
 	calculNextLongitude,
-	getBiggestDivisor,
     buildGrid
 } = require('./lib/math.js');
 const {
@@ -26,7 +25,8 @@ const {
 } = require('./lib/reactive.js');
 const FakeGeoService = require('./lib/fake-geo.service.js');
 const {
-	buildGeoTile
+	buildGeoTile,
+    splitGeoTile
 } = require('./lib/geo-tile.utils.js');
 
 /**
@@ -185,20 +185,6 @@ const isSmallerTileInsideTileBandLongitude = function isSmallerTileInsideTileBan
 };
 
 /**
- * Util to split a GeoTile in an array of smaller GeoTile.
- * @param tile The GeoTile to split
- * @return An array of smaller GeoTile
- */
-const splitGeoTile = function splitGeoTile (tile) {
-	const step = getBiggestDivisor(tile.step);
-	const array = buildGrid(tile.coords[0], tile.coords[2], step);
-
-	return array.map(coord => {
-		return buildGeoTile(coord, step);
-	});
-};
-
-/**
  * Runner !
  */
 const run = function run (coordStart, coordEnd, step) {
@@ -273,6 +259,5 @@ module.exports = {
 	isTileBandLongitudeInsideBiggerTile,
 	isSmallerTileInsideTileBandLatitude,
 	isSmallerTileInsideTileBandLongitude,
-	splitGeoTile,
 	run
 };
