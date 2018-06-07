@@ -20,7 +20,8 @@ const {
 const {
 	mapCoordsToGeoTiles,
 	mergeMapGeoTileWithService,
-	mapArrayToValuefromIndex
+	mapArrayToValuefromIndex,
+    accumulateGeoTile
 } = require('./lib/reactive.js');
 const FakeGeoService = require('./lib/fake-geo.service.js');
 const {
@@ -253,9 +254,7 @@ const run = function run (coordStart, coordEnd, step) {
 			mergeMap(geoTile => {
 				return mergeMapGeoTileWithService(geoTile, fakeSrv);
 			}),
-			reduce((acc, geoTile) => {
-				return [...acc, geoTile];
-			}, []),
+            accumulateGeoTile(),
             map(geoTiles => {
                 const borders = geoTiles.filter((tile, idx, array) => {
                     const neighbors = getNeighbors(array, tile);
@@ -287,9 +286,7 @@ const run = function run (coordStart, coordEnd, step) {
 			mergeMap(geoTile => {
 				return mergeMapGeoTileWithService(geoTile, fakeSrv);
 			}),
-			reduce((acc, geoTile) => {
-				return [...acc, geoTile];
-			}, [])
+            accumulateGeoTile()
 		);
 };
 
