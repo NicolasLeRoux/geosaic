@@ -14,7 +14,8 @@ const {
 	take,
 	map,
 	tap,
-	reduce
+	reduce,
+    filter
 } = require('rxjs/operators');
 const {
 	mapCoordsToGeoTiles,
@@ -246,15 +247,23 @@ const run = function run (coordStart, coordEnd, step) {
 		.pipe(
 			mapArrayToValuefromIndex(array),
 			take(array.length),
-			withLatestFrom(of(step), (coord, step) => {
-				return buildGeoTile(coord, step);
+			map(coord => {
+				return buildGeoTile(coord, step, `${coord.lat}_${coord.lon}_${step}`);
 			}),
 			mergeMap(geoTile => {
 				return mergeMapGeoTileWithService(geoTile, fakeSrv);
 			}),
 			reduce((acc, geoTile) => {
 				return [...acc, geoTile];
-			}, [])
+			}, []),
+            map(geoTiles => {
+                return geoTiles.filter((tile, idx, array) => {
+                    const neighbors = getNeighbors(array, tile);
+                    const state = neighbors.find(item => item.isSomethingHere !== tile.isSomethingHere);
+
+                    return !!state;
+                });
+            })
 		);
 };
 
