@@ -1,7 +1,7 @@
 const {
 	calculNextLatitude,
 	calculNextLongitude,
-    buildGrid
+	buildGrid
 } = require('./lib/math.js');
 const {
 	from,
@@ -15,19 +15,19 @@ const {
 	map,
 	tap,
 	reduce,
-    filter
+	filter
 } = require('rxjs/operators');
 const {
 	mapCoordsToGeoTiles,
 	mergeMapGeoTileWithService,
 	mapArrayToValuefromIndex,
-    accumulateGeoTile,
-    splitGeoTileAtBorder
+	accumulateGeoTile,
+	splitGeoTileAtBorder
 } = require('./lib/reactive.js');
 const FakeGeoService = require('./lib/fake-geo.service.js');
 const {
 	buildGeoTile,
-    splitGeoTile,
+	splitGeoTile,
 	getNeighbors,
 	isAdjacentLatitude,
 	isAdjacentLongitude,
@@ -68,28 +68,28 @@ const run = function run (coordStart, coordEnd, step) {
 			mergeMap(geoTile => {
 				return mergeMapGeoTileWithService(geoTile, fakeSrv);
 			}),
-            accumulateGeoTile(),
-            // First split
-            splitGeoTileAtBorder(),
-            mergeMap(array => from(array)),
+			accumulateGeoTile(),
+			// First split
+			splitGeoTileAtBorder(),
+			mergeMap(array => from(array)),
 			mergeMap(geoTile => {
 				return mergeMapGeoTileWithService(geoTile, fakeSrv);
 			}),
-            accumulateGeoTile(),
-            // Second split
-            splitGeoTileAtBorder(),
-            mergeMap(array => from(array)),
+			accumulateGeoTile(),
+			// Second split
+			splitGeoTileAtBorder(),
+			mergeMap(array => from(array)),
 			mergeMap(geoTile => {
 				return mergeMapGeoTileWithService(geoTile, fakeSrv);
 			}),
-            accumulateGeoTile(),
-            // Third split
-            splitGeoTileAtBorder(),
-            mergeMap(array => from(array)),
+			accumulateGeoTile(),
+			// Third split
+			splitGeoTileAtBorder(),
+			mergeMap(array => from(array)),
 			mergeMap(geoTile => {
 				return mergeMapGeoTileWithService(geoTile, fakeSrv);
 			}),
-            accumulateGeoTile(),
+			accumulateGeoTile(),
 		);
 };
 
