@@ -43,3 +43,8 @@ stream.once('open', () => {
 
 	stream.end();
 });
+
+fs.unlink(path.join(__dirname, './tmp/coords_to_process.csv'), (err) => {
+	if (err) console.error(err);
+	console.log('The temporary file has been deleted!');
+});
