@@ -36,9 +36,9 @@ app.get('/api/grid/:latA/:lonA/:latB/:lonB/:step', (req, res) => {
 
 	return run(start, end, step)
 		.toPromise()
-		.then(tiles => {
+		.then(items => {
 			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify(tiles));
+			res.send(JSON.stringify(items));
 		}, () => {
 			res.status(500)
 				.send('Something broke!');

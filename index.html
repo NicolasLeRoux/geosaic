@@ -39,12 +39,18 @@
 			fetch('/api/grid/13.767212/100.486635/13.738533/100.528520/130').then(resp => {
 				return resp.json();
 			}).then(data => {
-				data.forEach(coord => {
-					let circle = L.circle(coord, {
-							color: 'yellow',
-							fillOpacity: 0,
-							radius: 2
-						})
+				data.forEach(item => {
+					const opts = {
+						color: 'yellow',
+						fillOpacity: 0,
+						radius: 2
+					};
+
+					if (item.isSomethingHere) {
+						opts.color = 'green';
+					}
+
+					const circle = L.circle(item.coord, opts)
 						.addTo(geoMap);
 				});
 			})

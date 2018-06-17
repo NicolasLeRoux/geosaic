@@ -50,8 +50,8 @@ const run = function run (coordStart, coordEnd, radius) {
 		radius,
 		points: [
 			{
-				lat: 51.505,
-				lon: -0.069
+				lat: 13.750288,
+				lon: 100.504059
 			}
 		]
 	});
@@ -59,7 +59,22 @@ const run = function run (coordStart, coordEnd, radius) {
 
 	const array = buildGrid(coordStart, coordEnd, step);
 
-	return of(array);
+	return from(array)
+		.pipe(
+			take(array.length),
+			mergeMap(coord => {
+				return fakeSrv.query(coord)
+					.pipe(
+						map(resp => {
+							return {
+								coord,
+								isSomethingHere: resp
+							}
+						})
+					);
+			}),
+			accumulateGeoTile()
+		);
 };
 
 module.exports = {
