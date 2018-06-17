@@ -8,6 +8,12 @@ const {
 	buildGeoTile
 } = require('./lib/geo-tile.utils.js');
 require('dotenv').config();
+const BigQuery = require('@google-cloud/bigquery');
+const InvaderGeoService = require('./lib/invader-geo.service.js');
+const {
+	insertProcessedCoord,
+	deleteCoordToProcess
+} = require('./lib/query.js');
 
 let app = express(),
 	server = http.createServer(app);
@@ -44,6 +50,72 @@ app.get('/api/grid/:latA/:lonA/:latB/:lonB/:step', (req, res) => {
 			res.status(500)
 				.send('Something broke!');
 		});
+});
+
+app.get('/api/process-next-coord', (req, res) => {
+	const isCron = req.get('X-Appengine-Cron');
+	const bigquery = new BigQuery({
+		projectId: process.env.PROJECT_ID,
+		keyFilename: 'keyfile.json'
+	});
+	const sqlQuery = `SELECT
+		latitude,longitude
+		FROM \`geosaic-207514.invaders.coords_to_process\`
+		LIMIT 1`;
+	const readOptions = {
+		query: sqlQuery,
+		useLegacySql: false
+	};
+
+	// Only process from appengine cron
+	if (isCron || true) {
+		bigquery
+		.query(readOptions)
+		.then(results => {
+			const rows = results[0];
+			console.info(rows);
+
+			if (!!rows.length) {
+				const srv = new InvaderGeoService();
+				return srv.query({
+						lat: +rows[0].latitude,
+						lon: +rows[0].longitude
+					})
+					.toPromise();
+			}
+
+			return undefined;
+		})
+		// Insert new coord in processed table
+		.then(point => {
+			return bigquery
+				.query({
+					query: insertProcessedCoord(point),
+					useLegacySql: false
+				})
+				.then(results => {
+					console.info('A new coord have been save in processed data.');
+					return point;
+				});
+		})
+		// Delete coord to process
+		.then(point => {
+			return bigquery
+				.query({
+					query: deleteCoordToProcess(point),
+					useLegacySql: false
+				});
+		})
+		.then(results => {
+			console.info('The processed coord have been remove from the coord to process.');
+		})
+		.catch(err => {
+			console.error('ERROR:', err);
+		});
+	}
+
+	res.status(200)
+		.send('Done!');
 });
 
 /**
