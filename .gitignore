@@ -62,3 +62,6 @@ typings/
 
 # Temporary folder
 tmp
+
+# BigQuery service account
+keyfile.json

@@ -4,6 +4,8 @@ const {
 } = require('./lib/math.js');
 const path = require('path');
 const fs = require('fs');
+const BigQuery = require('@google-cloud/bigquery');
+require('dotenv').config();
 
 const coordStart = {
 	lat: +process.argv[2],
@@ -24,7 +26,7 @@ if (!coordStart.lat || !coordStart.lon || !coordEnd.lat || !coordEnd.lon || !rad
 const step = calculMaxStep(radius);
 const array = buildGrid(coordStart, coordEnd, step);
 
-console.info(`There is ${array.length} to process for this request !`);
+console.info(`There is ${array.length} point to process for this request !`);
 
 const rate = 10;
 const timeNeededInDays = array.length * rate / (60 * 60 * 24);
@@ -44,7 +46,37 @@ stream.once('open', () => {
 	stream.end();
 });
 
-fs.unlink(path.join(__dirname, './tmp/coords_to_process.csv'), (err) => {
-	if (err) console.error(err);
-	console.log('The temporary file has been deleted!');
+const datasetId = 'invaders';
+const tableId = 'coords_to_process';
+const filename = './tmp/coords_to_process.csv';
+
+// Creates a client
+const bigquery = new BigQuery({
+	projectId: process.env.PROJECT_ID,
+	keyFilename: 'keyfile.json'
 });
+
+bigquery
+	.dataset(datasetId)
+	.table(tableId)
+	.load(filename)
+	.then(results => {
+		const job = results[0];
+
+		// load() waits for the job to finish
+		console.log(`Job ${job.id} completed.`);
+
+		// Check the job's status for errors
+		const errors = job.status.errors;
+		if (errors && errors.length > 0) {
+			throw errors;
+		} else {
+			fs.unlink(path.join(__dirname, filename), (err) => {
+				if (err) console.error(err);
+				console.log('The temporary file has been deleted!');
+			});
+		}
+	})
+	.catch(err => {
+		console.error('ERROR:', err);
+	});
