@@ -7,6 +7,7 @@ const {
 const {
 	buildGeoTile
 } = require('./lib/geo-tile.utils.js');
+require('dotenv').config();
 
 let app = express(),
 	server = http.createServer(app);
