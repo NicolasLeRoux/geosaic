@@ -1,7 +1,8 @@
 const {
 	calculNextLatitude,
 	calculNextLongitude,
-	buildGrid
+	buildGrid,
+	calculMaxStep
 } = require('./lib/math.js');
 const {
 	from,
@@ -44,10 +45,9 @@ const {
 /**
  * Runner !
  */
-const run = function run (coordStart, coordEnd, step) {
-	// 3. Map GeoTile to service
+const run = function run (coordStart, coordEnd, radius) {
 	const fakeSrv = new FakeGeoService({
-		radius: 200,
+		radius,
 		points: [
 			{
 				lat: 51.505,
@@ -55,42 +55,11 @@ const run = function run (coordStart, coordEnd, step) {
 			}
 		]
 	});
+	const step = calculMaxStep(radius);
 
 	const array = buildGrid(coordStart, coordEnd, step);
 
-	return interval(0)
-		.pipe(
-			mapArrayToValuefromIndex(array),
-			take(array.length),
-			map(coord => {
-				return buildGeoTile(coord, step, `${coord.lat}_${coord.lon}_${step}`);
-			}),
-			mergeMap(geoTile => {
-				return mergeMapGeoTileWithService(geoTile, fakeSrv);
-			}),
-			accumulateGeoTile(),
-			// First split
-			splitGeoTileAtBorder(),
-			mergeMap(array => from(array)),
-			mergeMap(geoTile => {
-				return mergeMapGeoTileWithService(geoTile, fakeSrv);
-			}),
-			accumulateGeoTile(),
-			// Second split
-			splitGeoTileAtBorder(),
-			mergeMap(array => from(array)),
-			mergeMap(geoTile => {
-				return mergeMapGeoTileWithService(geoTile, fakeSrv);
-			}),
-			accumulateGeoTile(),
-			// Third split
-			splitGeoTileAtBorder(),
-			mergeMap(array => from(array)),
-			mergeMap(geoTile => {
-				return mergeMapGeoTileWithService(geoTile, fakeSrv);
-			}),
-			accumulateGeoTile(),
-		);
+	return of(array);
 };
 
 module.exports = {

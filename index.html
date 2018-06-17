@@ -6,7 +6,7 @@
 		<script src="node_modules/leaflet/dist/leaflet.js"></script>
 		<style>
 			#map {
-				height: 300px;
+				height: 400px;
 			}
 		</style>
 	</head>
@@ -16,36 +16,36 @@
 
 		<script>
 			let geoMap = L.map('map')
-				.setView([51.506, -0.07], 15);
+				.setView([13.753123, 100.498308], 14);
 
-			let marker = L.marker([51.505, -0.069])
+			let circle = L.circle([13.750288, 100.504059], {
+					color: 'red',
+					fillColor: '#f03',
+					fillOpacity: 0.1,
+					radius: 130
+				})
 				.addTo(geoMap);
 
 			let polygon = L.polygon([
-				[51.5075, -0.073],
-				[51.5075, -0.065],
-				[51.5032, -0.065],
-				[51.5032, -0.073]
+				[13.767212, 100.486635],
+				[13.767212, 100.528520],
+				[13.738533, 100.528520],
+				[13.738533, 100.486635]
 			], {
-				color: 'red',
-				fillColor: '#f03',
-				fillOpacity: 0.1,
+				color: 'yellow',
+				fillOpacity: 0,
 			}).addTo(geoMap);
 
-			fetch('/api/grid/51.5075/-0.073/51.5032/-0.065/100').then(resp => {
+			fetch('/api/grid/13.767212/100.486635/13.738533/100.528520/130').then(resp => {
 				return resp.json();
 			}).then(data => {
-				data.forEach(geoTile => {
-					const opts = {};
-
-					if (geoTile.isSomethingHere) {
-						opts.color = 'yellow';
-					}
-
-					const polygon = L.polygon(geoTile.coords, opts)
+				data.forEach(coord => {
+					let circle = L.circle(coord, {
+							color: 'yellow',
+							fillOpacity: 0,
+							radius: 2
+						})
 						.addTo(geoMap);
-
-					polygon.bindPopup(`ID: ${geoTile.id}`);
 				});
 			})
 		</script>
