@@ -135,25 +135,25 @@ app.get('/api/hits/:latA/:lonA/:latB/:lonB', (req, res) => {
 	const sqlQuery = `SELECT
 		latitude,longitude,state
 		FROM \`geosaic-207514.invaders.processed_coords\`
-        WHERE latitude<=${start.lat}
-        AND latitude>=${end.lat}
-        AND longitude>=${start.lon}
-        AND longitude<=${end.lon}
-        AND state=true
+		WHERE latitude<=${start.lat}
+		AND latitude>=${end.lat}
+		AND longitude>=${start.lon}
+		AND longitude<=${end.lon}
+		AND state=true
 		LIMIT 100`;
 	const readOptions = {
 		query: sqlQuery,
 		useLegacySql: false
 	};
 
-    bigquery
+	bigquery
 		.query(readOptions)
 		.then(results => {
 			const rows = results[0];
 
 			res.setHeader('Content-Type', 'application/json');
 			res.send(JSON.stringify(rows));
-        })
+		})
 		.catch(err => {
 			res.status(500)
 				.send('Something broke!');
