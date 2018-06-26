@@ -114,8 +114,50 @@ app.get('/api/process-next-coord', (req, res) => {
 		});
 	}
 
-	res.status(200)
+	res.status(202)
 		.send('Done!');
+});
+
+app.get('/api/hits/:latA/:lonA/:latB/:lonB', (req, res) => {
+	const start = {
+		lat: +req.params.latA,
+		lon: +req.params.lonA
+	};
+	const end = {
+		lat: +req.params.latB,
+		lon: +req.params.lonB
+	};
+
+	const bigquery = new BigQuery({
+		projectId: process.env.PROJECT_ID,
+		keyFilename: 'keyfile.json'
+	});
+	const sqlQuery = `SELECT
+		latitude,longitude,state
+		FROM \`geosaic-207514.invaders.processed_coords\`
+        WHERE latitude<=${start.lat}
+        AND latitude>=${end.lat}
+        AND longitude>=${start.lon}
+        AND longitude<=${end.lon}
+        AND state=true
+		LIMIT 100`;
+	const readOptions = {
+		query: sqlQuery,
+		useLegacySql: false
+	};
+
+    bigquery
+		.query(readOptions)
+		.then(results => {
+			const rows = results[0];
+
+			res.setHeader('Content-Type', 'application/json');
+			res.send(JSON.stringify(rows));
+        })
+		.catch(err => {
+			res.status(500)
+				.send('Something broke!');
+		});
 });
 
 /**

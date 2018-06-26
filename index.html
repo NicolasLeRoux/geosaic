@@ -53,7 +53,10 @@
 					const circle = L.circle(item.coord, opts)
 						.addTo(geoMap);
 				});
-			})
+			});
+
+            const coordNE = geoMap.getBounds().getNorthEast();
+            const coordSW = geoMap.getBounds().getSouthWest();
 		</script>
 	</body>
 </html>
