@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const express = require('express');
 const http = require('http');
 const {
@@ -14,12 +15,18 @@ const {
 	insertProcessedCoord,
 	deleteCoordToProcess
 } = require('./lib/query.js');
+require('dotenv').config();
 
 let app = express(),
 	server = http.createServer(app);
 
 app.get('/', (req, res) => {
-	res.sendFile(path.join(__dirname, 'index.html'));
+	//res.sendFile(path.join(__dirname, 'index.html'));
+	fs.readFile(path.join(__dirname, 'index.html'), 'utf8', function (err, data) {
+		const result = data.replace(/%%LEAFLET_TOKEN%%/g, process.env.LEAFLET_TOKEN);
+
+		res.send(result);
+	});
 });
 
 app.get('/src/**/*', (req, res) => {
@@ -107,7 +114,7 @@ app.get('/api/process-next-coord', (req, res) => {
 				});
 		})
 		.then(results => {
-			console.info('The processed coord have been remove from the coord to process.');
+			console.info('The processed coord have been remove from the coord to process.\n---');
 		})
 		.catch(err => {
 			console.error('ERROR:', err);
@@ -139,7 +146,6 @@ app.get('/api/hits/:latA/:lonA/:latB/:lonB', (req, res) => {
 		AND latitude>=${end.lat}
 		AND longitude>=${start.lon}
 		AND longitude<=${end.lon}
-		AND state=true
 		LIMIT 100`;
 	const readOptions = {
 		query: sqlQuery,
