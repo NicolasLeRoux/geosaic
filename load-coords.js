@@ -28,7 +28,7 @@ const array = buildGrid(coordStart, coordEnd, step);
 
 console.info(`There is ${array.length} point to process for this request !`);
 
-const rate = 10;
+const rate = 30;
 const timeNeededInDays = array.length * rate / (60 * 60 * 24);
 console.info(`At a ${rate}s rate, it will take ${timeNeededInDays.toFixed(2)} days.`);
 

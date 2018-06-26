@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "mocha ./**/*.spec.js index.spec.js reactive.spec.js",
-    "load": "node load-coords.js 50.487397 4.317745 50.357029 4.543994 130"
+    "load": "node load-coords.js 13.806973 100.434621 13.651223 100.606969 130"
   },
   "repository": {
     "type": "git",
