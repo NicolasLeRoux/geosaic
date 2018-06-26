@@ -125,7 +125,7 @@ app.get('/api/process-next-coord', (req, res) => {
 		.send('Done!');
 });
 
-app.get('/api/hits/:latA/:lonA/:latB/:lonB', (req, res) => {
+app.get('/api/processed/:latA/:lonA/:latB/:lonB', (req, res) => {
 	const start = {
 		lat: +req.params.latA,
 		lon: +req.params.lonA

@@ -77,7 +77,7 @@
 
 			const coordNW = geoMap.getBounds().getNorthWest();
 			const coordSE = geoMap.getBounds().getSouthEast();
-			fetch(`/api/hits/${coordNW.lat}/${coordNW.lng}/${coordSE.lat}/${coordSE.lng}`).then(resp => {
+			fetch(`/api/processed/${coordNW.lat}/${coordNW.lng}/${coordSE.lat}/${coordSE.lng}`).then(resp => {
 				return resp.json();
 			}).then(data => {
 				data.forEach(item => {
