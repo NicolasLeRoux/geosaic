@@ -1,0 +1,5 @@
+cron:
+- description : TODO
+  url : /api/process-next-coord
+  schedule: every 1 minutes
+  timezone: Europe/Paris
