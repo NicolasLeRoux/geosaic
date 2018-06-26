@@ -10,20 +10,95 @@
 			};
 		</script>
 		<style>
+			.filter {
+				margin-bottom: 20px;
+			}
+
 			#map {
 				height: 400px;
 			}
 		</style>
 	</head>
 	<body>
-		<h1>TODO</h1>
+		<h1>GeoSaic</h1>
+
+		<div class="filter">
+			<span>Select a hit to see its surrounding: </span>
+			<select id="select">
+			</select>
+
+			<button id="run">Run</button>
+		</div>
+
 		<div id="map"></div>
+
+		<script>
+			window.geoMap = L.map('map')
+				.setView([50.406257, 4.448341], 14);
+
+			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+				maxZoom: 18,
+				id: 'mapbox.streets',
+				accessToken: env.leafletToken
+			}).addTo(geoMap);
+		</script>
+
+		<script>
+			document.querySelector('#run').addEventListener('click', () => {
+				const select = document.querySelector('#select');
+				const [lat, lon] = select.value.split(',');
+
+				if (!!lat && !!lon) {
+					geoMap.setView([lat, lon], 14);
+				}
+			});
+		</script>
+
+		<script>
+			const select = document.querySelector('#select');
+
+			fetch(`/api/hits`).then(resp => {
+				return resp.json();
+			}).then(data => {
+				data.forEach((item, idx) => {
+					const option = document.createElement('option');
+					option.value = `${item.latitude},${item.longitude}`;
+					option.innerText = `${idx}. ${item.latitude}, ${item.longitude}`;
+
+					select.appendChild(option);
+				});
+			});
+		</script>
+
+		<script>
+			geoMap.on('moveend', () => {
+				const coordNW = geoMap.getBounds().getNorthWest();
+				const coordSE = geoMap.getBounds().getSouthEast();
+
+				fetch(`/api/processed/${coordNW.lat}/${coordNW.lng}/${coordSE.lat}/${coordSE.lng}`).then(resp => {
+					return resp.json();
+				}).then(data => {
+					data.forEach(item => {
+						const opts = {
+							color: 'red',
+							fillOpacity: 0,
+							radius: 0
+						};
+
+						if (item.state) {
+							opts.radius = 130;
+						}
+
+						const circle = L.circle([item.latitude, item.longitude], opts)
+							.addTo(geoMap);
+					});
+				});
+			});
+		</script>
 
 		<!--
 		<script>
-			let geoMap = L.map('map')
-				.setView([13.753123, 100.498308], 14);
-
 			let circle = L.circle([13.750288, 100.504059], {
 					color: 'green',
 					radius: 130
@@ -63,38 +138,5 @@
 			});
 		</script>
 		-->
-
-		<script>
-			let geoMap = L.map('map')
-				.setView([50.406257, 4.448341], 14);
-
-			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-				maxZoom: 18,
-				id: 'mapbox.streets',
-				accessToken: env.leafletToken
-			}).addTo(geoMap);
-
-			const coordNW = geoMap.getBounds().getNorthWest();
-			const coordSE = geoMap.getBounds().getSouthEast();
-			fetch(`/api/processed/${coordNW.lat}/${coordNW.lng}/${coordSE.lat}/${coordSE.lng}`).then(resp => {
-				return resp.json();
-			}).then(data => {
-				data.forEach(item => {
-					const opts = {
-						color: 'red',
-						fillOpacity: 0,
-						radius: 0
-					};
-
-					if (item.state) {
-						opts.radius = 130;
-					}
-
-					const circle = L.circle([item.latitude, item.longitude], opts)
-						.addTo(geoMap);
-				});
-			});
-		</script>
 	</body>
 </html>

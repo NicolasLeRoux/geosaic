@@ -166,6 +166,35 @@ app.get('/api/processed/:latA/:lonA/:latB/:lonB', (req, res) => {
 		});
 });
 
+app.get('/api/hits', (req, res) => {
+	const bigquery = new BigQuery({
+		projectId: process.env.PROJECT_ID,
+		keyFilename: 'keyfile.json'
+	});
+	const sqlQuery = `SELECT
+		latitude,longitude,state
+		FROM \`geosaic-207514.invaders.processed_coords\`
+		WHERE state=true
+		LIMIT 1000`;
+	const readOptions = {
+		query: sqlQuery,
+		useLegacySql: false
+	};
+
+	bigquery
+		.query(readOptions)
+		.then(results => {
+			const rows = results[0];
+
+			res.setHeader('Content-Type', 'application/json');
+			res.send(JSON.stringify(rows));
+		})
+		.catch(err => {
+			res.status(500)
+				.send('Something broke!');
+		});
+});
+
 /**
  * Starting server
  */
