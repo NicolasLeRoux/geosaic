@@ -4,7 +4,10 @@ const {
 } = require('./lib/math.js');
 const path = require('path');
 const fs = require('fs');
+const { of, from, Subject } = require('rxjs');
+const { concatMap, mergeMap, reduce, tap } = require('rxjs/operators');
 const BigQuery = require('@google-cloud/bigquery');
+const Datastore = require('@google-cloud/datastore');
 require('dotenv').config();
 
 const coordStart = {
@@ -37,6 +40,7 @@ if (!fs.existsSync(tmpDir)){
 	fs.mkdirSync(tmpDir);
 }
 
+/*
 const stream = fs.createWriteStream(path.join(__dirname, './tmp/coords_to_process.csv'));
 stream.once('open', () => {
 	array.forEach(coord => {
@@ -80,3 +84,49 @@ bigquery
 	.catch(err => {
 		console.error('ERROR:', err);
 	});
+*/
+
+const saveToDataStore = function (coord) {
+    const sbj = new Subject();
+    const datastore = new Datastore({
+        projectId: process.env.PROJECT_ID,
+        keyFilename: 'keyfiles/datastore.json'
+    });
+    const taskKey = datastore.key('coord-to-process');
+    const entity = {
+        key: taskKey,
+        data: [
+            {
+                name: 'lat',
+                value: coord.lat
+            },
+            {
+                name: 'lng',
+                value: coord.lon
+            }
+        ]
+    };
+
+    datastore
+        .save(entity)
+        .then(() => {
+            sbj.next(coord);
+        })
+        .catch(err => {
+            sbj.error(err);
+        });
+
+    return sbj.asObservable();
+};
+
+from(array)
+    .pipe(
+        concatMap(coord => saveToDataStore(coord)),
+        tap(coord => console.info(`The coord ${coord.lat}, ${coord.lon} have been saved.`))
+    )
+    .subscribe(coord => {
+        console.info('--- END ---');
+    },
+    err => {
+        console.error(err);
+    });
