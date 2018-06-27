@@ -16,6 +16,7 @@ const {
 	deleteCoordToProcess
 } = require('./lib/query.js');
 require('dotenv').config();
+const Datastore = require('@google-cloud/datastore');
 
 let app = express(),
 	server = http.createServer(app);
@@ -63,7 +64,7 @@ app.get('/api/process-next-coord', (req, res) => {
 	const isCron = req.get('X-Appengine-Cron');
 	const bigquery = new BigQuery({
 		projectId: process.env.PROJECT_ID,
-		keyFilename: 'keyfile.json'
+		keyFilename: 'keyfiles/bigquery.json'
 	});
 	const sqlQuery = `SELECT
 		latitude,longitude
@@ -137,7 +138,7 @@ app.get('/api/processed/:latA/:lonA/:latB/:lonB', (req, res) => {
 
 	const bigquery = new BigQuery({
 		projectId: process.env.PROJECT_ID,
-		keyFilename: 'keyfile.json'
+		keyFilename: 'keyfiles/bigquery.json'
 	});
 	const sqlQuery = `SELECT
 		latitude,longitude,state
@@ -169,7 +170,7 @@ app.get('/api/processed/:latA/:lonA/:latB/:lonB', (req, res) => {
 app.get('/api/hits', (req, res) => {
 	const bigquery = new BigQuery({
 		projectId: process.env.PROJECT_ID,
-		keyFilename: 'keyfile.json'
+		keyFilename: 'keyfiles/bigquery.json'
 	});
 	const sqlQuery = `SELECT
 		latitude,longitude,state
@@ -193,6 +194,55 @@ app.get('/api/hits', (req, res) => {
 			res.status(500)
 				.send('Something broke!');
 		});
+});
+
+app.get('/api/test', (req, res) => {
+    const datastore = new Datastore({
+		projectId: process.env.PROJECT_ID,
+		keyFilename: 'keyfiles/datastore.json'
+    });
+    const taskKey = datastore.key('Coord');
+    const entity = {
+        key: taskKey,
+        data: [
+            {
+                name: 'lat',
+                value: 48.777562
+            },
+            {
+                name: 'lng',
+                value: 2.284789
+            }
+        ]
+    };
+    const query = datastore.createQuery('Coord');
+
+    datastore
+    .runQuery(query)
+    .then(results => {
+      const tasks = results[0];
+
+      console.log('Tasks:');
+      tasks.forEach(task => {
+        const taskKey = task[datastore.KEY];
+        console.log(taskKey.id, task);
+      });
+    })
+    .catch(err => {
+      console.error('ERROR:', err);
+    });
+
+    datastore
+        .save(entity)
+        .then(() => {
+            console.log(`Task ${taskKey.id} created successfully.`);
+        })
+        .catch(err => {
+            console.error('ERROR:', err);
+        });
+
+	res.status(202)
+		.send('Done!');
 });
 
 /**
