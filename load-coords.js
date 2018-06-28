@@ -5,7 +5,7 @@ const {
 const path = require('path');
 const fs = require('fs');
 const { of, from, Subject } = require('rxjs');
-const { concatMap, mergeMap, reduce, tap } = require('rxjs/operators');
+const { concatMap, mergeMap, reduce, tap, mapTo } = require('rxjs/operators');
 const BigQuery = require('@google-cloud/bigquery');
 const Datastore = require('@google-cloud/datastore');
 require('dotenv').config();
@@ -87,7 +87,6 @@ bigquery
 */
 
 const saveToDataStore = function (coord) {
-    const sbj = new Subject();
     const datastore = new Datastore({
         projectId: process.env.PROJECT_ID,
         keyFilename: 'keyfiles/datastore.json'
@@ -107,22 +106,23 @@ const saveToDataStore = function (coord) {
         ]
     };
 
-    datastore
-        .save(entity)
-        .then(() => {
-            sbj.next(coord);
-        })
-        .catch(err => {
-            sbj.error(err);
-        });
+    const promise = datastore
+        .save(entity);
 
-    return sbj.asObservable();
+    return from(promise)
+        .pipe(mapTo(coord));
 };
 
 from(array)
     .pipe(
         concatMap(coord => saveToDataStore(coord)),
-        tap(coord => console.info(`The coord ${coord.lat}, ${coord.lon} have been saved.`))
+        tap(coord => console.info(`The coord ${coord.lat}, ${coord.lon} have been saved.`)),
+        reduce((acc, coord) => {
+            const percent = Math.round(100 * (acc.length + 1) / array.length);
+            console.info(`${percent}% done (${acc.length + 1} / ${array.length})\n`);
+
+            return [...acc, coord];
+        }, [])
     )
     .subscribe(coord => {
         console.info('--- END ---');
