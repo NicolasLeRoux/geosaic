@@ -86,45 +86,56 @@ bigquery
 	});
 */
 
-const saveToDataStore = function (coord) {
+const saveToDataStore = function (coords) {
     const datastore = new Datastore({
         projectId: process.env.PROJECT_ID,
         keyFilename: 'keyfiles/datastore.json'
     });
     const taskKey = datastore.key('coord-to-process');
-    const entity = {
-        key: taskKey,
-        data: [
-            {
-                name: 'lat',
-                value: coord.lat
-            },
-            {
-                name: 'lng',
-                value: coord.lon
-            }
-        ]
-    };
+    const entities = coords.map(coord => {
+		return {
+	        key: taskKey,
+	        data: [
+	            {
+	                name: 'lat',
+	                value: coord.lat
+	            },
+	            {
+	                name: 'lng',
+	                value: coord.lon
+	            }
+        	]
+		};
+    });
 
     const promise = datastore
-        .save(entity);
+        .save(entities);
 
     return from(promise)
-        .pipe(mapTo(coord));
+        .pipe(mapTo(coords));
 };
 
-from(array)
+of(array)
     .pipe(
-        concatMap(coord => saveToDataStore(coord)),
-        tap(coord => console.info(`The coord ${coord.lat}, ${coord.lon} have been saved.`)),
-        reduce((acc, coord) => {
-            const percent = Math.round(100 * (acc.length + 1) / array.length);
-            console.info(`${percent}% done (${acc.length + 1} / ${array.length})\n`);
+		mergeMap(array => {
+			const copy = array.slice();
+			const result = [];
 
-            return [...acc, coord];
+			while (copy.length >= 500) {
+				result.push(copy.splice(0, 500));
+			}
+
+			return from(result);
+		}),
+        concatMap(coords => saveToDataStore(coords)),
+        reduce((acc, coords) => {
+            const percent = Math.round(100 * (acc.length + coords.length) / array.length);
+            console.info(`${percent}% done (${acc.length + coords.length} / ${array.length})\n`);
+
+            return [...acc, ...coords];
         }, [])
     )
-    .subscribe(coord => {
+    .subscribe(() => {
         console.info('--- END ---');
     },
     err => {
