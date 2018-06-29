@@ -66,60 +66,59 @@ app.get('/api/process-next-coord', (req, res) => {
 		projectId: process.env.PROJECT_ID,
 		keyFilename: 'keyfiles/bigquery.json'
 	});
-	const sqlQuery = `SELECT
-		latitude,longitude
-		FROM \`geosaic-207514.invaders.coords_to_process\`
-		LIMIT 1`;
-	const readOptions = {
-		query: sqlQuery,
-		useLegacySql: false
-	};
+	const datastore = new Datastore({
+		projectId: process.env.PROJECT_ID,
+		keyFilename: 'keyfiles/datastore.json'
+	});
 
 	// Only process from appengine cron
 	if (isCron || true) {
-		bigquery
-		.query(readOptions)
-		.then(results => {
-			const rows = results[0];
-			console.info(rows);
+		const query = datastore.createQuery('coord-to-process')
+			.limit(1);
 
-			if (!!rows.length) {
-				const srv = new InvaderGeoService();
-				return srv.query({
-						lat: +rows[0].latitude,
-						lon: +rows[0].longitude
+		datastore
+			.runQuery(query)
+			.then(results => {
+				const rows = results[0];
+
+				if (!!rows.length) {
+					const id = rows[0][datastore.KEY].id;
+					const srv = new InvaderGeoService();
+					return srv.query({
+							lat: +rows[0].lat,
+							lon: +rows[0].lng,
+							id
+						})
+						.toPromise();
+				}
+
+				return undefined;
+			})
+			// Insert new coord in processed table
+			.then(point => {
+				return bigquery
+					.query({
+						query: insertProcessedCoord(point),
+						useLegacySql: false
 					})
-					.toPromise();
-			}
+					.then(results => {
+						console.info('A new coord have been save in processed data.');
+						return point;
+					});
+			})
+			// Delete coord to process
+			.then(point => {
+				const key = datastore.key(['coord-to-process', point.id]);
 
-			return undefined;
-		})
-		// Insert new coord in processed table
-		.then(point => {
-			return bigquery
-				.query({
-					query: insertProcessedCoord(point),
-					useLegacySql: false
-				})
-				.then(results => {
-					console.info('A new coord have been save in processed data.');
-					return point;
-				});
-		})
-		// Delete coord to process
-		.then(point => {
-			return bigquery
-				.query({
-					query: deleteCoordToProcess(point),
-					useLegacySql: false
-				});
-		})
-		.then(results => {
-			console.info('The processed coord have been remove from the coord to process.\n---');
-		})
-		.catch(err => {
-			console.error('ERROR:', err);
-		});
+				return datastore
+					.delete(key);
+			})
+			.then(results => {
+				console.info('The processed coord have been remove from the coord to process.\n---');
+			})
+			.catch(err => {
+				console.error('ERROR:', err);
+			});
 	}
 
 	res.status(202)
@@ -201,7 +200,7 @@ app.get('/api/test', (req, res) => {
 		projectId: process.env.PROJECT_ID,
 		keyFilename: 'keyfiles/datastore.json'
     });
-    const taskKey = datastore.key('Coord');
+    const taskKey = datastore.key('coord-to-process');
     const entity = {
         key: taskKey,
         data: [
@@ -222,7 +221,8 @@ app.get('/api/test', (req, res) => {
     .then(results => {
       const tasks = results[0];
 
-      console.log('Tasks:');
+      console.log('Tasks:', tasks);
+	  console.log('\n');
       tasks.forEach(task => {
         const taskKey = task[datastore.KEY];
         console.log(taskKey.id, task);
