@@ -82,12 +82,12 @@ app.get('/api/process-next-coord', (req, res) => {
 				const rows = results[0];
 
 				if (!!rows.length) {
-					const id = rows[0][datastore.KEY].id;
+					const key = rows[0][datastore.KEY];
 					const srv = new InvaderGeoService();
 					return srv.query({
 							lat: +rows[0].lat,
 							lon: +rows[0].lng,
-							id
+							key
 						})
 						.toPromise();
 				}
@@ -102,16 +102,14 @@ app.get('/api/process-next-coord', (req, res) => {
 						useLegacySql: false
 					})
 					.then(results => {
-						console.info('A new coord have been save in processed data.');
+						console.info(`The coord ${point.lat}, ${point.lon} have been save in processed data.`);
 						return point;
 					});
 			})
 			// Delete coord to process
 			.then(point => {
-				const key = datastore.key(['coord-to-process', point.id]);
-
 				return datastore
-					.delete(key);
+					.delete(point.key);
 			})
 			.then(results => {
 				console.info('The processed coord have been remove from the coord to process.\n---');
