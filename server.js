@@ -144,7 +144,7 @@ app.get('/api/processed/:latA/:lonA/:latB/:lonB', (req, res) => {
 		AND latitude>=${end.lat}
 		AND longitude>=${start.lon}
 		AND longitude<=${end.lon}
-		LIMIT 100`;
+		LIMIT 1000`;
 	const readOptions = {
 		query: sqlQuery,
 		useLegacySql: false
