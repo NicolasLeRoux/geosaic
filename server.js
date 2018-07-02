@@ -123,6 +123,41 @@ app.get('/api/process-next-coord', (req, res) => {
 		.send('Done!');
 });
 
+app.get('/api/process-given-coord/:lat/:lng/', (req, res) => {
+	const coord = {
+		lat: +req.params.lat,
+		lon: +req.params.lng
+	};
+	const srv = new InvaderGeoService();
+	const bigquery = new BigQuery({
+		projectId: process.env.PROJECT_ID,
+		keyFilename: 'keyfiles/bigquery.json'
+	});
+
+	srv.query(coord)
+		.toPromise()
+		.then(point => {
+			return bigquery
+				.query({
+					query: insertProcessedCoord(point),
+					useLegacySql: false
+				})
+				.then(results => {
+					console.info(`The coord ${point.lat}, ${point.lon} have been save in processed data.`);
+					return point;
+				});
+		})
+		.then(results => {
+			console.info('\n---');
+		})
+		.catch(err => {
+			console.error('ERROR:', err);
+		});
+
+	res.status(202)
+		.send('Done!');
+});
+
 app.get('/api/processed/:latA/:lonA/:latB/:lonB', (req, res) => {
 	const start = {
 		lat: +req.params.latA,
