@@ -81,13 +81,13 @@
 				}).then(data => {
 					data.forEach(item => {
 						const opts = {
-							color: 'red',
+							color: 'yellow',
 							fillOpacity: 0,
-							radius: 0
+							radius: 130
 						};
 
 						if (item.state) {
-							opts.radius = 130;
+							opts.color = 'red';
 						}
 
 						const circle = L.circle([item.latitude, item.longitude], opts)
