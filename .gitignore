@@ -69,3 +69,7 @@ keyfiles
 
 ## OSX
 .DS_Store
+
+# Google sheet API
+credentials.json
+token.json
